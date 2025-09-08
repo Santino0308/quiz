@@ -55,6 +55,365 @@ body.dark-mode {
     box-sizing: border-box;
 }
 
+/* Login Screen Styles */
+.login-container {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #ff6b9d 0%, #c44569 50%, #a29bfe 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.login-box {
+    background: var(--white);
+    border-radius: 25px;
+    padding: 40px;
+    max-width: 400px;
+    width: 100%;
+    box-shadow: var(--cute-shadow);
+    text-align: center;
+}
+
+.login-header h1 {
+    color: var(--accent-purple);
+    font-size: 1.8rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+}
+
+.login-header p {
+    color: var(--dark-gray);
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: 30px;
+}
+
+.login-form {
+    text-align: left;
+}
+
+.input-group {
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    display: block;
+    color: var(--accent-purple);
+    font-weight: 600;
+    margin-bottom: 8px;
+    font-size: 1rem;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 15px;
+    border: 2px solid var(--secondary-pink);
+    border-radius: 15px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: var(--primary-pink);
+    box-shadow: 0 0 0 3px rgba(255, 107, 157, 0.2);
+}
+
+.login-btn {
+    width: 100%;
+    background: var(--gradient-1);
+    border: none;
+    border-radius: 15px;
+    padding: 15px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--white);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+}
+
+.login-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255, 107, 157, 0.4);
+}
+
+.login-error {
+    background: rgba(231, 76, 60, 0.1);
+    color: #e74c3c;
+    padding: 10px;
+    border-radius: 10px;
+    margin-top: 15px;
+    font-weight: 600;
+}
+
+.login-footer {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 2px solid var(--secondary-pink);
+}
+
+.login-footer p {
+    color: var(--dark-gray);
+    font-size: 0.9rem;
+    font-style: italic;
+}
+
+/* Header Buttons */
+.header-buttons {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.analytics-toggle, .logout-btn {
+    background: var(--gradient-1);
+    border: none;
+    border-radius: 50px;
+    padding: 12px 20px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--white);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(255, 107, 157, 0.3);
+}
+
+.analytics-toggle:hover, .logout-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255, 107, 157, 0.4);
+}
+
+/* Analytics Dashboard Styles */
+.analytics-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.analytics-header h2 {
+    color: var(--accent-purple);
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+}
+
+.analytics-subtitle {
+    color: var(--dark-gray);
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+.analytics-overview {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.stat-card {
+    background: var(--white);
+    border: 2px solid var(--secondary-pink);
+    border-radius: 20px;
+    padding: 25px;
+    text-align: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--primary-pink);
+    box-shadow: 0 10px 25px rgba(255, 107, 157, 0.2);
+}
+
+.stat-icon {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.stat-info h3 {
+    color: var(--accent-purple);
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 5px;
+}
+
+.stat-info p {
+    color: var(--dark-gray);
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.analytics-section {
+    background: var(--white);
+    border-radius: 20px;
+    padding: 25px;
+    margin-bottom: 25px;
+    border: 2px solid var(--secondary-pink);
+}
+
+.analytics-section h3 {
+    color: var(--accent-purple);
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.subject-performance {
+    display: grid;
+    gap: 15px;
+}
+
+.subject-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background: var(--light-pink);
+    border-radius: 15px;
+    border: 2px solid var(--secondary-pink);
+}
+
+.subject-name {
+    font-weight: 600;
+    color: var(--accent-purple);
+}
+
+.subject-score {
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.score-excellent { color: #27ae60; }
+.score-good { color: #f39c12; }
+.score-needs-work { color: #e74c3c; }
+
+.recent-activity {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.activity-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    margin-bottom: 10px;
+    background: var(--light-pink);
+    border-radius: 10px;
+    border-left: 4px solid var(--primary-pink);
+}
+
+.activity-info {
+    flex: 1;
+}
+
+.activity-title {
+    font-weight: 600;
+    color: var(--accent-purple);
+    margin-bottom: 2px;
+}
+
+.activity-details {
+    font-size: 0.85rem;
+    color: var(--dark-gray);
+}
+
+.activity-score {
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+.readiness-meter {
+    text-align: center;
+}
+
+.readiness-progress {
+    background: var(--light-gray);
+    border-radius: 25px;
+    height: 20px;
+    margin-bottom: 15px;
+    overflow: hidden;
+}
+
+.readiness-fill {
+    background: var(--gradient-1);
+    height: 100%;
+    border-radius: 25px;
+    transition: width 0.5s ease;
+}
+
+.readiness-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.readiness-info span:first-child {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--accent-purple);
+}
+
+.readiness-info span:last-child {
+    font-weight: 600;
+    color: var(--dark-gray);
+}
+
+.goal-progress {
+    text-align: center;
+}
+
+.goal-bar {
+    background: var(--light-gray);
+    border-radius: 15px;
+    height: 15px;
+    margin-bottom: 10px;
+    overflow: hidden;
+}
+
+.goal-fill {
+    background: var(--gradient-2);
+    height: 100%;
+    border-radius: 15px;
+    transition: width 0.5s ease;
+}
+
+.goal-progress p {
+    color: var(--dark-gray);
+    font-weight: 600;
+}
+
+.analytics-actions {
+    text-align: center;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 2px solid var(--secondary-pink);
+}
+
+.reset-btn {
+    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+    border: none;
+    border-radius: 15px;
+    padding: 12px 25px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--white);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-right: 15px;
+}
+
+.reset-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(231, 76, 60, 0.4);
+}
+
 body {
     font-family: 'Nunito', sans-serif;
     background: linear-gradient(135deg, #ff6b9d 0%, #c44569 50%, #a29bfe 100%);
@@ -1312,6 +1671,43 @@ h1 {
         flex-direction: column;
         gap: 15px;
         text-align: center;
+    }
+    
+    .header-buttons {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    
+    .login-box {
+        padding: 30px 20px;
+        margin: 0 10px;
+    }
+    
+    .login-header h1 {
+        font-size: 1.5rem;
+    }
+    
+    .analytics-overview {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 15px;
+    }
+    
+    .stat-card {
+        padding: 20px 15px;
+    }
+    
+    .stat-info h3 {
+        font-size: 1.5rem;
+    }
+    
+    .analytics-section {
+        padding: 20px 15px;
+    }
+    
+    .subject-item, .activity-item {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
     }
     
     .challenge-options, .exam-options {
