@@ -13,6 +13,330 @@ let timePerQuestion = 60;
 let cardNotes = {}; // Store notes for each card
 let isComprehensiveBoardExam = false; // Track if we're in board exam mode
 
+// Analytics Variables
+let analyticsData = {
+    studySessions: [],
+    studyStreak: 0,
+    lastStudyDate: null,
+    totalStudyTime: 0,
+    dailyGoal: 30, // minutes
+    todayStudyTime: 0
+};
+
+// Login System
+const validCredentials = [
+    { username: 'Monique', password: 'iloveyou' },
+    { username: 'Admin', password: 'moniki' },
+    { username: 'Samantha', password: 'impretty' }
+];
+
+// Authentication Functions
+function checkLogin() {
+    const isLoggedIn = localStorage.getItem('isLoggedIn');
+    const username = localStorage.getItem('username');
+    
+    if (isLoggedIn === 'true' && validCredentials.some(cred => cred.username === username)) {
+        showMainApp();
+    } else {
+        showLoginScreen();
+    }
+}
+
+function showLoginScreen() {
+    document.getElementById('loginScreen').style.display = 'flex';
+    document.getElementById('mainContainer').classList.add('hidden');
+}
+
+function showMainApp() {
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('mainContainer').classList.remove('hidden');
+    loadAnalyticsData();
+    updateAnalyticsDashboard();
+}
+
+function handleLogin(event) {
+    event.preventDefault();
+    
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    const errorElement = document.getElementById('loginError');
+    
+    const validUser = validCredentials.find(cred => 
+        cred.username === username && cred.password === password
+    );
+    
+    if (validUser) {
+        localStorage.setItem('isLoggedIn', 'true');
+        localStorage.setItem('username', username);
+        showMainApp();
+        errorElement.classList.add('hidden');
+    } else {
+        errorElement.classList.remove('hidden');
+        // Clear password field
+        document.getElementById('password').value = '';
+    }
+}
+
+function logout() {
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('username');
+    showLoginScreen();
+    // Clear form fields
+    document.getElementById('username').value = '';
+    document.getElementById('password').value = '';
+}
+
+// Analytics Functions
+function loadAnalyticsData() {
+    const currentUsername = localStorage.getItem('username');
+    const saved = localStorage.getItem('analyticsData_' + currentUsername);
+    if (saved) {
+        analyticsData = { ...analyticsData, ...JSON.parse(saved) };
+    }
+    
+    // Update today's study time
+    const today = new Date().toDateString();
+    const todaySessions = analyticsData.studySessions.filter(s => 
+        new Date(s.date).toDateString() === today
+    );
+    analyticsData.todayStudyTime = todaySessions.reduce((total, session) => 
+        total + (session.timeSpent || 0), 0
+    );
+    
+    // Update study streak
+    updateStudyStreak();
+}
+
+function saveAnalyticsData() {
+    const currentUsername = localStorage.getItem('username');
+    localStorage.setItem('analyticsData_' + currentUsername, JSON.stringify(analyticsData));
+}
+
+function recordStudySession(subject, topic, mode, score = null, timeSpent = 0, questionsAnswered = 0) {
+    const session = {
+        date: new Date().toISOString(),
+        subject,
+        topic,
+        mode,
+        score,
+        timeSpent,
+        questionsAnswered,
+        timestamp: Date.now()
+    };
+    
+    analyticsData.studySessions.unshift(session);
+    analyticsData.totalStudyTime += timeSpent;
+    analyticsData.todayStudyTime += timeSpent;
+    analyticsData.lastStudyDate = new Date().toDateString();
+    
+    // Keep only last 50 sessions
+    if (analyticsData.studySessions.length > 50) {
+        analyticsData.studySessions = analyticsData.studySessions.slice(0, 50);
+    }
+    
+    updateStudyStreak();
+    saveAnalyticsData();
+    updateAnalyticsDashboard();
+}
+
+function updateStudyStreak() {
+    const today = new Date();
+    let streak = 0;
+    let currentDate = new Date(today);
+    
+    while (true) {
+        const dateStr = currentDate.toDateString();
+        const hasStudiedThisDay = analyticsData.studySessions.some(session => 
+            new Date(session.date).toDateString() === dateStr
+        );
+        
+        if (hasStudiedThisDay) {
+            streak++;
+            currentDate.setDate(currentDate.getDate() - 1);
+        } else {
+            // If it's today and no study yet, don't break streak
+            if (dateStr === today.toDateString()) {
+                currentDate.setDate(currentDate.getDate() - 1);
+                continue;
+            }
+            break;
+        }
+        
+        // Limit to reasonable streak calculation
+        if (streak > 365) break;
+    }
+    
+    analyticsData.studyStreak = streak;
+}
+
+function showAnalytics() {
+    document.querySelectorAll('.menu, .game-mode').forEach(el => el.classList.add('hidden'));
+    document.getElementById('analyticsMode').classList.remove('hidden');
+    updateAnalyticsDashboard();
+}
+
+function updateAnalyticsDashboard() {
+    // Update overview cards
+    document.getElementById('studyStreak').textContent = analyticsData.studyStreak;
+    
+    const hours = Math.floor(analyticsData.totalStudyTime / 60);
+    const minutes = analyticsData.totalStudyTime % 60;
+    document.getElementById('totalStudyTime').textContent = `${hours}h ${minutes}m`;
+    
+    const totalSessions = analyticsData.studySessions.length;
+    document.getElementById('totalSessions').textContent = totalSessions;
+    
+    // Calculate average score
+    const scoredSessions = analyticsData.studySessions.filter(s => s.score !== null);
+    const averageScore = scoredSessions.length > 0 
+        ? Math.round(scoredSessions.reduce((sum, s) => sum + s.score, 0) / scoredSessions.length)
+        : 0;
+    document.getElementById('averageScore').textContent = `${averageScore}%`;
+    
+    // Update subject performance
+    updateSubjectPerformance();
+    
+    // Update recent activity
+    updateRecentActivity();
+    
+    // Update board exam readiness
+    updateBoardExamReadiness(averageScore);
+    
+    // Update daily goal progress
+    updateDailyGoal();
+}
+
+function updateSubjectPerformance() {
+    const container = document.getElementById('subjectPerformance');
+    container.innerHTML = '';
+    
+    const subjectScores = {};
+    
+    // Calculate average score per subject
+    analyticsData.studySessions.forEach(session => {
+        if (session.score !== null && session.subject) {
+            if (!subjectScores[session.subject]) {
+                subjectScores[session.subject] = { scores: [], name: '' };
+            }
+            subjectScores[session.subject].scores.push(session.score);
+        }
+    });
+    
+    // Get subject names and calculate averages
+    Object.keys(courseData).forEach(subjectKey => {
+        if (subjectScores[subjectKey]) {
+            const scores = subjectScores[subjectKey].scores;
+            const average = Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
+            
+            const item = document.createElement('div');
+            item.className = 'subject-item';
+            
+            const scoreClass = average >= 85 ? 'score-excellent' : 
+                              average >= 70 ? 'score-good' : 'score-needs-work';
+            
+            item.innerHTML = `
+                <span class="subject-name">${courseData[subjectKey].title}</span>
+                <span class="subject-score ${scoreClass}">${average}%</span>
+            `;
+            
+            container.appendChild(item);
+        }
+    });
+    
+    if (container.innerHTML === '') {
+        container.innerHTML = '<p style="text-align: center; color: var(--dark-gray);">No quiz data yet. Start taking quizzes to see your performance!</p>';
+    }
+}
+
+function updateRecentActivity() {
+    const container = document.getElementById('recentActivity');
+    container.innerHTML = '';
+    
+    const recentSessions = analyticsData.studySessions.slice(0, 10);
+    
+    recentSessions.forEach(session => {
+        const item = document.createElement('div');
+        item.className = 'activity-item';
+        
+        const date = new Date(session.date);
+        const timeAgo = getTimeAgo(date);
+        const subjectTitle = courseData[session.subject]?.title || session.subject;
+        
+        const scoreDisplay = session.score !== null ? 
+            `<span class="activity-score">${session.score}%</span>` : '';
+        
+        item.innerHTML = `
+            <div class="activity-info">
+                <div class="activity-title">${session.mode} - ${session.topic}</div>
+                <div class="activity-details">${subjectTitle} • ${timeAgo}</div>
+            </div>
+            ${scoreDisplay}
+        `;
+        
+        container.appendChild(item);
+    });
+    
+    if (recentSessions.length === 0) {
+        container.innerHTML = '<p style="text-align: center; color: var(--dark-gray);">No study sessions yet. Start studying to see your activity!</p>';
+    }
+}
+
+function updateBoardExamReadiness(averageScore) {
+    const readinessScore = Math.min(averageScore, 100);
+    document.getElementById('readinessScore').textContent = `${readinessScore}%`;
+    document.getElementById('readinessBar').style.width = `${readinessScore}%`;
+    
+    let label;
+    if (readinessScore >= 85) {
+        label = 'Board Ready! 🎓';
+    } else if (readinessScore >= 75) {
+        label = 'Almost Ready! 💪';
+    } else if (readinessScore >= 60) {
+        label = 'Keep Studying! 📚';
+    } else {
+        label = 'More Practice Needed 📖';
+    }
+    
+    document.getElementById('readinessLabel').textContent = label;
+}
+
+function updateDailyGoal() {
+    const goalMinutes = analyticsData.dailyGoal;
+    const studiedToday = analyticsData.todayStudyTime;
+    const progress = Math.min((studiedToday / goalMinutes) * 100, 100);
+    
+    document.getElementById('goalProgress').style.width = `${progress}%`;
+    document.getElementById('goalText').textContent = 
+        `${studiedToday} / ${goalMinutes} minutes studied today`;
+}
+
+function resetAnalytics() {
+    if (confirm('Are you sure you want to reset all analytics data? This cannot be undone.')) {
+        analyticsData = {
+            studySessions: [],
+            studyStreak: 0,
+            lastStudyDate: null,
+            totalStudyTime: 0,
+            dailyGoal: 30,
+            todayStudyTime: 0
+        };
+        saveAnalyticsData();
+        updateAnalyticsDashboard();
+        alert('Analytics data has been reset!');
+    }
+}
+
+function getTimeAgo(date) {
+    const now = new Date();
+    const diffInSeconds = Math.floor((now - date) / 1000);
+    
+    if (diffInSeconds < 60) return 'Just now';
+    if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)} minutes ago`;
+    if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)} hours ago`;
+    if (diffInSeconds < 2592000) return `${Math.floor(diffInSeconds / 86400)} days ago`;
+    return date.toLocaleDateString();
+}
+
 // Data Structure for all courses
 const courseData = {
     pmls401: {
@@ -1159,6 +1483,20 @@ function showFinalResults() {
     const percentage = Math.round((quizScore / currentQuizQuestions.length) * 100);
     document.getElementById('finalScore').textContent = `${quizScore}/${currentQuizQuestions.length} (${percentage}%)`;
     
+    // Record quiz session in analytics
+    const subject = courseData[currentSubject];
+    const topicTitle = subject?.topics[currentTopic]?.title || 'Mixed Quiz';
+    const timeSpent = 2; // Estimate 2 minutes per quiz session
+    
+    recordStudySession(
+        currentSubject, 
+        topicTitle, 
+        isComprehensiveBoardExam ? 'Board Exam' : 'Quiz', 
+        percentage, 
+        timeSpent, 
+        currentQuizQuestions.length
+    );
+    
     let performance, encouragement;
     
     if (isComprehensiveBoardExam) {
@@ -1202,9 +1540,11 @@ function showFinalResults() {
 
 // Initialize the application
 document.addEventListener('DOMContentLoaded', function() {
-    // Make sure we start at the main menu
-    document.querySelectorAll('.menu, .game-mode').forEach(el => el.classList.add('hidden'));
-    document.getElementById('mainMenu').classList.remove('hidden');
+    // Set up login form handler
+    document.getElementById('loginForm').addEventListener('submit', handleLogin);
+    
+    // Check authentication status
+    checkLogin();
     
     // Load saved notes
     loadNotes();
