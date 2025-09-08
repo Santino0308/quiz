@@ -4,7 +4,7 @@ An interactive web-based learning platform designed for Medical Technology stude
 
 ## 🚀 Live Demo
 
-Visit the live application: [[https://yourusername.github.io/quiz](https://santino0308.github.io/quiz)]
+Visit the live application: [https://santino0308.github.io/quiz](https://santino0308.github.io/quiz)
 
 ## 📚 Features
 
@@ -85,5 +85,5 @@ This project is open source and available under the [MIT License](LICENSE).
 
 ## 🎓 Created For Medical Technology Students
 
-
 *Empowering the next generation of Medical Technologists with interactive learning tools.*
+
