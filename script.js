@@ -27,7 +27,7 @@ let analyticsData = {
 const validCredentials = [
     { username: 'Monique', password: 'iloveyou' },
     { username: 'Admin', password: 'moniki' },
-    { username: 'Samantha', password: 'impretty' }
+    { username: 'Samantha', password: 'impretty' },
     { username: 'Chris Ann', password: 'wawix' }
 ];
 
@@ -2057,5 +2057,3 @@ function startBoardExamTimer() {
         timeLeft--;
     }, 1000);
 }
-
-
