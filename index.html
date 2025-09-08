@@ -1,4 +1,4 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
     <html lang="en">
     <head>
         <meta charset="UTF-8">
@@ -8,10 +8,137 @@
         <link rel="stylesheet" href="styles.css">
     </head>
     <body>
-        <div class="container">
+        <!-- Login Screen -->
+        <div id="loginScreen" class="login-container">
+            <div class="login-box">
+                <div class="login-header">
+                    <h1>🔬 MedTech Learning Platform</h1>
+                    <p>Please log in to access your study materials</p>
+                </div>
+                
+                <form id="loginForm" class="login-form">
+                    <div class="input-group">
+                        <label for="username">👤 Username</label>
+                        <input type="text" id="username" name="username" required>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="password">🔐 Password</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    
+                    <button type="submit" class="login-btn">🚀 Log In</button>
+                    
+                    <div id="loginError" class="login-error hidden">
+                        ❌ Invalid username or password. Please try again.
+                    </div>
+                </form>
+                
+                <div class="login-footer">
+                    <p>✨ Access your personalized study analytics and progress tracking</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="container hidden" id="mainContainer">
             <div class="header-controls">
                 <h1>🔬 Medical Laboratory Science Learning Games 🔬</h1>
-                <button onclick="toggleDarkMode()" class="theme-toggle" id="themeToggle">🌙 Dark Mode</button>
+                <div class="header-buttons">
+                    <button onclick="showAnalytics()" class="analytics-toggle" id="analyticsToggle">📊 Analytics</button>
+                    <button onclick="toggleDarkMode()" class="theme-toggle" id="themeToggle">🌙 Dark Mode</button>
+                    <button onclick="logout()" class="logout-btn">🚪 Logout</button>
+                </div>
+            </div>
+
+            <!-- Analytics Dashboard -->
+            <div id="analyticsMode" class="menu hidden">
+                <div class="analytics-header">
+                    <h2>📊 Study Analytics Dashboard</h2>
+                    <p class="analytics-subtitle">Track your progress and improve your performance</p>
+                </div>
+                
+                <div class="analytics-content">
+                    <!-- Study Overview Cards -->
+                    <div class="analytics-overview">
+                        <div class="stat-card">
+                            <div class="stat-icon">🔥</div>
+                            <div class="stat-info">
+                                <h3 id="studyStreak">0</h3>
+                                <p>Day Study Streak</p>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon">⏱️</div>
+                            <div class="stat-info">
+                                <h3 id="totalStudyTime">0h 0m</h3>
+                                <p>Total Study Time</p>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon">🎯</div>
+                            <div class="stat-info">
+                                <h3 id="averageScore">0%</h3>
+                                <p>Average Score</p>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon">📚</div>
+                            <div class="stat-info">
+                                <h3 id="totalSessions">0</h3>
+                                <p>Study Sessions</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Subject Performance -->
+                    <div class="analytics-section">
+                        <h3>📋 Subject Performance</h3>
+                        <div id="subjectPerformance" class="subject-performance">
+                            <!-- Will be populated by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <!-- Recent Activity -->
+                    <div class="analytics-section">
+                        <h3>📅 Recent Study Sessions</h3>
+                        <div id="recentActivity" class="recent-activity">
+                            <!-- Will be populated by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <!-- Board Exam Readiness -->
+                    <div class="analytics-section">
+                        <h3>🎓 Board Exam Readiness</h3>
+                        <div class="readiness-meter">
+                            <div class="readiness-progress">
+                                <div id="readinessBar" class="readiness-fill" style="width: 0%"></div>
+                            </div>
+                            <div class="readiness-info">
+                                <span id="readinessScore">0%</span>
+                                <span id="readinessLabel">Keep Studying!</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Study Goals -->
+                    <div class="analytics-section">
+                        <h3>🎯 Daily Goal</h3>
+                        <div class="goal-progress">
+                            <div class="goal-bar">
+                                <div id="goalProgress" class="goal-fill" style="width: 0%"></div>
+                            </div>
+                            <p id="goalText">0 / 30 minutes studied today</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="analytics-actions">
+                    <button onclick="resetAnalytics()" class="reset-btn">🔄 Reset Analytics</button>
+                    <button onclick="goToMainMenu()" class="back-btn">← Back to Main Menu</button>
+                </div>
             </div>
             
             <!-- Main Menu -->
@@ -349,4 +476,9 @@
 
         <script src="script.js"></script>
     </body>
+    </html>
+
+        <script src="script.js"></script>
+    </body>
+
     </html>
