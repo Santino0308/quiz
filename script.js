@@ -52,6 +52,45 @@ function showMainApp() {
     document.getElementById('mainContainer').classList.remove('hidden');
     loadAnalyticsData();
     updateAnalyticsDashboard();
+    showWelcomeMessage();
+}
+
+// Welcome Message Function
+function showWelcomeMessage() {
+    const username = localStorage.getItem('username');
+    
+    // Create welcome message overlay
+    const welcomeOverlay = document.createElement('div');
+    welcomeOverlay.className = 'welcome-overlay';
+    welcomeOverlay.innerHTML = `
+        <div class="welcome-message">
+            <div class="welcome-icon">🎉</div>
+            <h2>Welcome ${username}!</h2>
+            <p>It's time to study and ace your Medical Technology Board Exam! 🔬✨</p>
+            <div class="welcome-stats">
+                <span>📚 Study Streak: ${analyticsData.studyStreak} days</span>
+                <span>⏰ Total Time: ${Math.floor(analyticsData.totalStudyTime / 60)}h ${analyticsData.totalStudyTime % 60}m</span>
+            </div>
+            <button onclick="closeWelcomeMessage()" class="welcome-btn">🚀 Let's Study!</button>
+        </div>
+    `;
+    
+    document.body.appendChild(welcomeOverlay);
+    
+    // Auto-close after 4 seconds
+    setTimeout(() => {
+        closeWelcomeMessage();
+    }, 4000);
+}
+
+function closeWelcomeMessage() {
+    const welcomeOverlay = document.querySelector('.welcome-overlay');
+    if (welcomeOverlay) {
+        welcomeOverlay.style.opacity = '0';
+        setTimeout(() => {
+            welcomeOverlay.remove();
+        }, 300);
+    }
 }
 
 function handleLogin(event) {
@@ -2017,3 +2056,4 @@ function startBoardExamTimer() {
         timeLeft--;
     }, 1000);
 }
+
