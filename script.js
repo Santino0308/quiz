@@ -11,6 +11,7 @@ let currentQuizQuestions = [];
 let timerInterval = null;
 let timePerQuestion = 60;
 let cardNotes = {}; // Store notes for each card
+let bookmarkedQuestions = {}; // Store bookmarked questions
 let isComprehensiveBoardExam = false; // Track if we're in board exam mode
 
 // Analytics Variables
@@ -1239,6 +1240,9 @@ function goToModeSelector() {
         const topicText = document.getElementById('quizTopic').textContent;
         if (topicText === 'Subject Practice Exam') {
             document.getElementById('subjectMenu').classList.remove('hidden');
+        } else if (topicText === 'Bookmarked Questions Review') {
+            // If coming from saved questions quiz, go back to saved questions
+            document.getElementById('savedQuestionsMode').classList.remove('hidden');
         } else {
             document.getElementById('modeSelector').classList.remove('hidden');
         }
@@ -1377,6 +1381,9 @@ function startQuiz() {
     // Shuffle the quiz questions every time
     shuffleQuizQuestions();
     
+    // Also shuffle the options within each question
+    shuffleQuestionOptions();
+    
     currentQuiz = 0;
     quizScore = 0;
     
@@ -1393,11 +1400,50 @@ function shuffleQuizQuestions() {
     }
 }
 
+// Function to shuffle options within each question for variety
+function shuffleQuestionOptions() {
+    currentQuizQuestions.forEach(question => {
+        if (question.options && question.options.length > 0) {
+            // Store the correct answer text before shuffling
+            const correctAnswerText = question.options[question.answer];
+            
+            // Create array of option objects with original indices
+            const optionsWithIndex = question.options.map((option, index) => ({
+                text: option,
+                originalIndex: index
+            }));
+            
+            // Shuffle the options array
+            for (let i = optionsWithIndex.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [optionsWithIndex[i], optionsWithIndex[j]] = [optionsWithIndex[j], optionsWithIndex[i]];
+            }
+            
+            // Update the question options and find new correct answer index
+            question.options = optionsWithIndex.map(item => item.text);
+            question.answer = optionsWithIndex.findIndex(item => item.text === correctAnswerText);
+        }
+    });
+}
+
 function loadQuestion() {
     if (currentQuizQuestions.length === 0) return;
     
     const question = currentQuizQuestions[currentQuiz];
-    document.getElementById('quizQuestion').innerHTML = `<h3>${question.question}</h3>`;
+    
+    // Update question content while preserving the bookmark button
+    const questionContainer = document.getElementById('quizQuestion');
+    const bookmarkBtn = document.getElementById('bookmarkBtn');
+    
+    // Create or update the question text element
+    let questionTextElement = questionContainer.querySelector('.question-text');
+    if (!questionTextElement) {
+        questionTextElement = document.createElement('div');
+        questionTextElement.className = 'question-text';
+        questionContainer.appendChild(questionTextElement);
+    }
+    
+    questionTextElement.innerHTML = `<h3>${question.question}</h3>`;
     
     const optionsContainer = document.getElementById('quizOptions');
     optionsContainer.innerHTML = '';
@@ -1420,6 +1466,9 @@ function loadQuestion() {
     document.getElementById('nextQuizBtn').classList.add('hidden');
     document.getElementById('restartBtn').classList.add('hidden');
     quizAnswered = false;
+    
+    // Update bookmark button status
+    updateBookmarkButton(isQuestionBookmarked(question));
     
     updateQuestionCounter();
     updateQuizScore();
@@ -1479,9 +1528,11 @@ function selectAnswer(selectedIndex) {
         if (selectedIndex === question.answer) {
             resultDiv.innerHTML = '<h3>✅ Correct! Great job! 🎉</h3>';
             quizScore++;
+            autoBookmarkIncorrectAnswer(question, true); // Track correct attempt
         } else {
             const correctAnswer = question.options[question.answer];
             resultDiv.innerHTML = `<h3>❌ Incorrect!</h3><p>The correct answer is: <strong>${correctAnswer}</strong></p>`;
+            autoBookmarkIncorrectAnswer(question, false); // Auto-bookmark incorrect answer
         }
         
         // Show appropriate button
@@ -1503,6 +1554,13 @@ function nextQuestion() {
 function restartQuiz() {
     currentQuiz = 0;
     quizScore = 0;
+    
+    // Shuffle the quiz questions again for the retake
+    shuffleQuizQuestions();
+    
+    // Also shuffle the options within each question for variety
+    shuffleQuestionOptions();
+    
     document.getElementById('resultsMode').classList.add('hidden');
     document.getElementById('quizMode').classList.remove('hidden');
     loadQuestion();
@@ -1528,10 +1586,14 @@ function showFinalResults() {
     const topicTitle = subject?.topics[currentTopic]?.title || 'Mixed Quiz';
     const timeSpent = 2; // Estimate 2 minutes per quiz session
     
+    // Check if this is a saved questions quiz
+    const quizTopicText = document.getElementById('quizTopic').textContent;
+    const isBookmarkedQuiz = quizTopicText === 'Bookmarked Questions Review';
+    
     recordStudySession(
-        currentSubject, 
-        topicTitle, 
-        isComprehensiveBoardExam ? 'Board Exam' : 'Quiz', 
+        currentSubject || 'savedQuestions', 
+        isBookmarkedQuiz ? 'Bookmarked Questions Review' : topicTitle, 
+        isComprehensiveBoardExam ? 'Board Exam' : (isBookmarkedQuiz ? 'Saved Questions Quiz' : 'Quiz'), 
         percentage, 
         timeSpent, 
         currentQuizQuestions.length
@@ -1553,6 +1615,24 @@ function showFinalResults() {
         } else {
             performance = "🔄 Intensive Review Required";
             encouragement = "Don't give up! Use flashcards and practice more. You can do this! 💗";
+        }
+    } else if (isBookmarkedQuiz) {
+        // Special messages for bookmarked questions quiz
+        if (percentage >= 90) {
+            performance = "🏆 Excellent Progress!";
+            encouragement = "Amazing! You've mastered these difficult questions! 🌟";
+        } else if (percentage >= 80) {
+            performance = "🎉 Great Improvement!";
+            encouragement = "You're getting better at these challenging questions! 💪";
+        } else if (percentage >= 70) {
+            performance = "👍 Making Progress!";
+            encouragement = "Keep practicing these questions - you're improving! �";
+        } else if (percentage >= 60) {
+            performance = "📖 Keep Practicing!";
+            encouragement = "These are tough questions - more practice will help! �💗";
+        } else {
+            performance = "🔄 More Review Needed!";
+            encouragement = "Focus on understanding these concepts better! 💪";
         }
     } else {
         // Regular quiz messages
@@ -1576,6 +1656,14 @@ function showFinalResults() {
     
     document.getElementById('performance').textContent = performance;
     document.getElementById('encouragement').textContent = encouragement;
+    
+    // Update the back button text in results for saved questions
+    if (isBookmarkedQuiz) {
+        const backButton = document.querySelector('#resultsMode .back-btn');
+        if (backButton) {
+            backButton.textContent = '← Back to Saved Questions';
+        }
+    }
 }
 
 // Initialize the application
@@ -1586,17 +1674,287 @@ document.addEventListener('DOMContentLoaded', function() {
     // Check authentication status
     checkLogin();
     
-    // Load saved notes
+    // Load saved notes and bookmarks
     loadNotes();
+    loadBookmarks();
     
     // Load dark mode preference
     const darkModeEnabled = localStorage.getItem('darkMode') === 'true';
     if (darkModeEnabled) {
         document.documentElement.classList.add('dark-mode');
         document.body.classList.add('dark-mode');
-        document.getElementById('themeToggle').textContent = '☀️ Light Mode';
+        document.getElementById('themeToggle').innerHTML = '<span class="setting-icon">☀️</span><span class="setting-text">Light Mode</span>';
+    } else {
+        document.getElementById('themeToggle').innerHTML = '<span class="setting-icon">🌙</span><span class="setting-text">Dark Mode</span>';
     }
 });
+
+// Bookmark Functions
+function loadBookmarks() {
+    const currentUsername = localStorage.getItem('username');
+    const saved = localStorage.getItem('bookmarkedQuestions_' + currentUsername);
+    if (saved) {
+        bookmarkedQuestions = JSON.parse(saved);
+    }
+}
+
+function saveBookmarks() {
+    const currentUsername = localStorage.getItem('username');
+    localStorage.setItem('bookmarkedQuestions_' + currentUsername, JSON.stringify(bookmarkedQuestions));
+}
+
+function createQuestionKey(question, subject = currentSubject, topic = currentTopic) {
+    // Create a unique key for the question based on its text and context
+    return `${subject}_${topic}_${question.question.substring(0, 50)}`;
+}
+
+function toggleBookmark() {
+    const question = currentQuizQuestions[currentQuiz];
+    const questionKey = createQuestionKey(question);
+    
+    if (isQuestionBookmarked(question)) {
+        // Remove bookmark
+        delete bookmarkedQuestions[questionKey];
+        updateBookmarkButton(false);
+    } else {
+        // Add bookmark
+        bookmarkedQuestions[questionKey] = {
+            question: question.question,
+            options: [...question.options],
+            answer: question.answer,
+            subject: currentSubject,
+            topic: currentTopic,
+            subjectTitle: courseData[currentSubject]?.title || 'Unknown Subject',
+            topicTitle: question.topicTitle || courseData[currentSubject]?.topics[currentTopic]?.title || 'Unknown Topic',
+            dateBookmarked: new Date().toISOString(),
+            attempts: 0,
+            correctAttempts: 0
+        };
+        updateBookmarkButton(true);
+    }
+    
+    saveBookmarks();
+}
+
+function isQuestionBookmarked(question) {
+    const questionKey = createQuestionKey(question);
+    return bookmarkedQuestions.hasOwnProperty(questionKey);
+}
+
+function updateBookmarkButton(isBookmarked) {
+    const bookmarkBtn = document.getElementById('bookmarkBtn');
+    if (bookmarkBtn) {
+        if (isBookmarked) {
+            bookmarkBtn.innerHTML = '🔖 Bookmarked';
+            bookmarkBtn.style.background = 'var(--gradient-3)';
+            bookmarkBtn.classList.add('bookmarked');
+        } else {
+            bookmarkBtn.innerHTML = '🔖 Bookmark';
+            bookmarkBtn.style.background = '';
+            bookmarkBtn.classList.remove('bookmarked');
+        }
+    }
+}
+
+function autoBookmarkIncorrectAnswer(question, wasCorrect) {
+    const questionKey = createQuestionKey(question);
+    
+    if (wasCorrect) {
+        // If the answer was correct, just update stats if bookmark exists
+        if (bookmarkedQuestions[questionKey]) {
+            bookmarkedQuestions[questionKey].attempts++;
+            bookmarkedQuestions[questionKey].correctAttempts++;
+            saveBookmarks();
+        }
+        // Don't create new bookmarks for correct answers
+        return;
+    }
+    
+    // Only create/update bookmark for incorrect answers
+    if (!bookmarkedQuestions[questionKey]) {
+        bookmarkedQuestions[questionKey] = {
+            question: question.question,
+            options: [...question.options],
+            answer: question.answer,
+            subject: currentSubject,
+            topic: currentTopic,
+            subjectTitle: courseData[currentSubject]?.title || 'Unknown Subject',
+            topicTitle: question.topicTitle || courseData[currentSubject]?.topics[currentTopic]?.title || 'Unknown Topic',
+            dateBookmarked: new Date().toISOString(),
+            attempts: 0,
+            correctAttempts: 0
+        };
+    }
+    
+    // Update attempt statistics for incorrect answer
+    bookmarkedQuestions[questionKey].attempts++;
+    // Don't increment correctAttempts since this was incorrect
+    
+    saveBookmarks();
+}
+
+function showSavedQuestions() {
+    document.querySelectorAll('.menu, .game-mode').forEach(el => el.classList.add('hidden'));
+    document.getElementById('savedQuestionsMode').classList.remove('hidden');
+    updateSavedQuestionsList();
+}
+
+function updateSavedQuestionsList() {
+    const container = document.getElementById('savedQuestionsList');
+    const countElement = document.getElementById('totalBookmarkedCount');
+    container.innerHTML = '';
+    
+    const bookmarks = Object.values(bookmarkedQuestions);
+    
+    // Update count display
+    if (countElement) {
+        countElement.textContent = `${bookmarks.length} question${bookmarks.length !== 1 ? 's' : ''} saved`;
+    }
+    
+    if (bookmarks.length === 0) {
+        container.innerHTML = `
+            <div class="no-bookmarks">
+                <h3>📖 No Saved Questions Yet</h3>
+                <p>Questions you bookmark and or got wrong during quizzes and exams will appear here for easy review!</p>
+                <p>💡 Tip: Bookmark difficult questions to practice them later.</p>
+            </div>
+        `;
+        return;
+    }
+    
+    // Group by subject
+    const bySubject = {};
+    bookmarks.forEach(bookmark => {
+        if (!bySubject[bookmark.subject]) {
+            bySubject[bookmark.subject] = [];
+        }
+        bySubject[bookmark.subject].push(bookmark);
+    });
+    
+    Object.keys(bySubject).forEach(subjectKey => {
+        const subjectSection = document.createElement('div');
+        subjectSection.className = 'subject-bookmark-section';
+        
+        const subjectTitle = courseData[subjectKey]?.title || subjectKey;
+        const subjectQuestions = bySubject[subjectKey];
+        
+        subjectSection.innerHTML = `
+            <div class="bookmark-subject-header">
+                <h3>${subjectTitle}</h3>
+                <span class="bookmark-count">${subjectQuestions.length} question${subjectQuestions.length !== 1 ? 's' : ''}</span>
+            </div>
+        `;
+        
+        const questionsList = document.createElement('div');
+        questionsList.className = 'bookmarked-questions-list';
+        
+        subjectQuestions.forEach((bookmark, index) => {
+            const questionItem = document.createElement('div');
+            questionItem.className = 'bookmarked-question-item';
+            
+            const successRate = bookmark.attempts > 0 ? Math.round((bookmark.correctAttempts / bookmark.attempts) * 100) : 0;
+            const difficulty = successRate >= 80 ? 'easy' : successRate >= 60 ? 'medium' : 'hard';
+            
+            questionItem.innerHTML = `
+                <div class="bookmark-question-header">
+                    <span class="bookmark-topic">${bookmark.topicTitle}</span>
+                    <div class="bookmark-stats">
+                        <span class="difficulty-badge ${difficulty}">${successRate}% correct</span>
+                        <button onclick="removeBookmark('${createQuestionKey(bookmark)}')" class="remove-bookmark">×</button>
+                    </div>
+                </div>
+                <div class="bookmark-question-text">${bookmark.question}</div>
+                <div class="bookmark-options">
+                    ${bookmark.options.map((option, i) => `
+                        <div class="bookmark-option ${i === bookmark.answer ? 'correct-option' : ''}">
+                            ${String.fromCharCode(65 + i)}. ${option}
+                        </div>
+                    `).join('')}
+                </div>
+                <div class="bookmark-meta">
+                    Bookmarked ${getTimeAgo(new Date(bookmark.dateBookmarked))} • ${bookmark.attempts} attempt${bookmark.attempts !== 1 ? 's' : ''}
+                </div>
+            `;
+            
+            questionsList.appendChild(questionItem);
+        });
+        
+        subjectSection.appendChild(questionsList);
+        container.appendChild(subjectSection);
+    });
+}
+
+function removeBookmark(questionKey) {
+    if (confirm('Remove this question from your bookmarks?')) {
+        delete bookmarkedQuestions[questionKey];
+        saveBookmarks();
+        updateSavedQuestionsList();
+    }
+}
+
+function clearAllBookmarks() {
+    const bookmarkCount = Object.keys(bookmarkedQuestions).length;
+    
+    if (bookmarkCount === 0) {
+        alert('No bookmarks to clear!');
+        return;
+    }
+    
+    const confirmMessage = `Are you sure you want to clear all ${bookmarkCount} bookmarked question${bookmarkCount !== 1 ? 's' : ''}? This action cannot be undone.`;
+    
+    if (confirm(confirmMessage)) {
+        bookmarkedQuestions = {};
+        saveBookmarks();
+        updateSavedQuestionsList();
+        
+        // Show success message
+        setTimeout(() => {
+            alert(`✅ All bookmarks cleared successfully!`);
+        }, 100);
+    }
+}
+
+function startBookmarkedQuestionsQuiz() {
+    const bookmarks = Object.values(bookmarkedQuestions);
+    
+    if (bookmarks.length === 0) {
+        alert('You haven\'t bookmarked any questions yet! Bookmark difficult questions during quizzes to practice them later.');
+        return;
+    }
+    
+    // Convert bookmarks to quiz format
+    currentQuizQuestions = bookmarks.map(bookmark => ({
+        question: bookmark.question,
+        options: [...bookmark.options],
+        answer: bookmark.answer,
+        topicTitle: bookmark.topicTitle,
+        subjectTitle: bookmark.subjectTitle,
+        isBookmarked: true
+    }));
+    
+    // Shuffle the bookmarked questions
+    shuffleArray(currentQuizQuestions);
+    shuffleQuestionOptions();
+    
+    // Start the quiz
+    document.getElementById('savedQuestionsMode').classList.add('hidden');
+    document.getElementById('quizMode').classList.remove('hidden');
+    
+    document.getElementById('quizCourse').textContent = 'Saved Questions';
+    document.getElementById('quizTopic').textContent = 'Bookmarked Questions Review';
+    
+    currentQuiz = 0;
+    quizScore = 0;
+    document.getElementById('totalQuestions').textContent = currentQuizQuestions.length;
+    
+    // Update the back button text for saved questions mode
+    const backButton = document.querySelector('#quizMode .back-btn');
+    if (backButton) {
+        backButton.textContent = '← Back to Saved Questions';
+    }
+    
+    loadQuestion();
+}
 
 // Dark Mode Toggle
 function toggleDarkMode() {
@@ -1608,13 +1966,32 @@ function toggleDarkMode() {
     body.classList.toggle('dark-mode');
     
     if (root.classList.contains('dark-mode')) {
-        toggle.textContent = '☀️ Light Mode';
+        toggle.innerHTML = '<span class="setting-icon">☀️</span><span class="setting-text">Light Mode</span>';
         localStorage.setItem('darkMode', 'true');
     } else {
-        toggle.textContent = '🌙 Dark Mode';
+        toggle.innerHTML = '<span class="setting-icon">🌙</span><span class="setting-text">Dark Mode</span>';
         localStorage.setItem('darkMode', 'false');
     }
+    
+    // Close settings dropdown after selection
+    toggleSettingsDropdown();
 }
+
+// Settings Dropdown Toggle
+function toggleSettingsDropdown() {
+    const settingsMenu = document.getElementById('settingsMenu');
+    settingsMenu.classList.toggle('hidden');
+}
+
+// Close settings dropdown when clicking outside
+document.addEventListener('click', function(event) {
+    const settingsDropdown = document.querySelector('.settings-dropdown');
+    const settingsMenu = document.getElementById('settingsMenu');
+    
+    if (settingsDropdown && !settingsDropdown.contains(event.target)) {
+        settingsMenu.classList.add('hidden');
+    }
+});
 
 // Notes functionality
 function toggleNotes() {
@@ -1720,6 +2097,9 @@ function startMixedQuiz() {
     // Shuffle and limit questions
     shuffleArray(allQuestions);
     currentQuizQuestions = allQuestions.slice(0, Math.min(questionCount, allQuestions.length));
+    
+    // Shuffle options within each question
+    shuffleQuestionOptions();
     
     // Start mixed quiz
     document.getElementById('mixedQuizSelector').classList.add('hidden');
@@ -1954,6 +2334,9 @@ function startSubjectPracticeExam() {
     shuffleArray(allQuestions);
     currentQuizQuestions = allQuestions.slice(0, 50);
     
+    // Shuffle options within each question
+    shuffleQuestionOptions();
+    
     // Hide subject menu and show quiz mode
     document.getElementById('subjectMenu').classList.add('hidden');
     document.getElementById('quizMode').classList.remove('hidden');
@@ -1997,6 +2380,9 @@ function startComprehensiveBoardExam() {
     // Shuffle and limit to 100 questions
     shuffleArray(allQuestions);
     currentQuizQuestions = allQuestions.slice(0, 100);
+    
+    // Shuffle options within each question
+    shuffleQuestionOptions();
     
     // Hide briefing and show quiz mode
     document.getElementById('boardExamBriefing').classList.add('hidden');
@@ -2057,3 +2443,6 @@ function startBoardExamTimer() {
         timeLeft--;
     }, 1000);
 }
+    }, 1000);
+}
+
