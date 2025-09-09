@@ -1,484 +1,523 @@
 <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Medical Laboratory Science - Learning Games</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2280%22>🔬</text></svg>">
-        <link rel="stylesheet" href="styles.css">
-    </head>
-    <body>
-        <!-- Login Screen -->
-        <div id="loginScreen" class="login-container">
-            <div class="login-box">
-                <div class="login-header">
-                    <h1>🔬 MedTech Learning Platform</h1>
-                    <p>Please log in to access your study materials</p>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Laboratory Science - Learning Games</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2280%22>🔬</text></svg>">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-container">
+        <div class="login-box">
+            <div class="login-header">
+                <h1>🔬 MedTech Learning Platform</h1>
+                <p>Please log in to access your study materials</p>
+            </div>
+            
+            <form id="loginForm" class="login-form">
+                <div class="input-group">
+                    <label for="username">👤 Username</label>
+                    <input type="text" id="username" name="username" required>
                 </div>
                 
-                <form id="loginForm" class="login-form">
-                    <div class="input-group">
-                        <label for="username">👤 Username</label>
-                        <input type="text" id="username" name="username" required>
-                    </div>
-                    
-                    <div class="input-group">
-                        <label for="password">🔐 Password</label>
-                        <input type="password" id="password" name="password" required>
-                    </div>
-                    
-                    <button type="submit" class="login-btn">🚀 Log In</button>
-                    
-                    <div id="loginError" class="login-error hidden">
-                        ❌ Invalid username or password. Please try again.
-                    </div>
-                </form>
+                <div class="input-group">
+                    <label for="password">🔐 Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
                 
-                <div class="login-footer">
-                    <p>✨ Access your personalized study analytics and progress tracking</p>
+                <button type="submit" class="login-btn">🚀 Log In</button>
+                
+                <div id="loginError" class="login-error hidden">
+                    ❌ Invalid username or password. Please try again.
+                </div>
+            </form>
+            
+            <div class="login-footer">
+                <p>✨ Access your personalized study analytics and progress tracking</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container hidden" id="mainContainer">
+        <div class="header-controls">
+            <h1>🔬 Medical Laboratory Science Learning Games 🔬</h1>
+            <div class="header-buttons">
+                <button onclick="showAnalytics()" class="analytics-toggle" id="analyticsToggle">📊 Analytics</button>
+                <button onclick="showSavedQuestions()" class="saved-questions-btn" id="savedQuestionsBtn">📖 Saved Questions</button>
+                <div class="settings-dropdown">
+                    <button onclick="toggleSettingsDropdown()" class="settings-btn" id="settingsBtn">⚙️ Settings</button>
+                    <div class="settings-menu hidden" id="settingsMenu">
+                        <button onclick="toggleDarkMode()" class="setting-item" id="themeToggle">
+                            <span class="setting-icon">🌙</span>
+                            <span class="setting-text">Dark Mode</span>
+                        </button>
+                        <button onclick="logout()" class="setting-item logout-item">
+                            <span class="setting-icon">🚪</span>
+                            <span class="setting-text">Logout</span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="container hidden" id="mainContainer">
-            <div class="header-controls">
-                <h1>🔬 Medical Laboratory Science Learning Games 🔬</h1>
-                <div class="header-buttons">
-                    <button onclick="showAnalytics()" class="analytics-toggle" id="analyticsToggle">📊 Analytics</button>
-                    <button onclick="toggleDarkMode()" class="theme-toggle" id="themeToggle">🌙 Dark Mode</button>
-                    <button onclick="logout()" class="logout-btn">🚪 Logout</button>
-                </div>
-            </div>
-
-            <!-- Analytics Dashboard -->
-            <div id="analyticsMode" class="menu hidden">
-                <div class="analytics-header">
-                    <h2>📊 Study Analytics Dashboard</h2>
-                    <p class="analytics-subtitle">Track your progress and improve your performance</p>
-                </div>
-                
-                <div class="analytics-content">
-                    <!-- Study Overview Cards -->
-                    <div class="analytics-overview">
-                        <div class="stat-card">
-                            <div class="stat-icon">🔥</div>
-                            <div class="stat-info">
-                                <h3 id="studyStreak">0</h3>
-                                <p>Day Study Streak</p>
-                            </div>
-                        </div>
-                        
-                        <div class="stat-card">
-                            <div class="stat-icon">⏱️</div>
-                            <div class="stat-info">
-                                <h3 id="totalStudyTime">0h 0m</h3>
-                                <p>Total Study Time</p>
-                            </div>
-                        </div>
-                        
-                        <div class="stat-card">
-                            <div class="stat-icon">🎯</div>
-                            <div class="stat-info">
-                                <h3 id="averageScore">0%</h3>
-                                <p>Average Score</p>
-                            </div>
-                        </div>
-                        
-                        <div class="stat-card">
-                            <div class="stat-icon">📚</div>
-                            <div class="stat-info">
-                                <h3 id="totalSessions">0</h3>
-                                <p>Study Sessions</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Subject Performance -->
-                    <div class="analytics-section">
-                        <h3>📋 Subject Performance</h3>
-                        <div id="subjectPerformance" class="subject-performance">
-                            <!-- Will be populated by JavaScript -->
-                        </div>
-                    </div>
-                    
-                    <!-- Recent Activity -->
-                    <div class="analytics-section">
-                        <h3>📅 Recent Study Sessions</h3>
-                        <div id="recentActivity" class="recent-activity">
-                            <!-- Will be populated by JavaScript -->
-                        </div>
-                    </div>
-                    
-                    <!-- Board Exam Readiness -->
-                    <div class="analytics-section">
-                        <h3>🎓 Board Exam Readiness</h3>
-                        <div class="readiness-meter">
-                            <div class="readiness-progress">
-                                <div id="readinessBar" class="readiness-fill" style="width: 0%"></div>
-                            </div>
-                            <div class="readiness-info">
-                                <span id="readinessScore">0%</span>
-                                <span id="readinessLabel">Keep Studying!</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Study Goals -->
-                    <div class="analytics-section">
-                        <h3>🎯 Daily Goal</h3>
-                        <div class="goal-progress">
-                            <div class="goal-bar">
-                                <div id="goalProgress" class="goal-fill" style="width: 0%"></div>
-                            </div>
-                            <p id="goalText">0 / 30 minutes studied today</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="analytics-actions">
-                    <button onclick="resetAnalytics()" class="reset-btn">🔄 Reset Analytics</button>
-                    <button onclick="goToMainMenu()" class="back-btn">← Back to Main Menu</button>
-                </div>
+        <!-- Analytics Dashboard -->
+        <div id="analyticsMode" class="menu hidden">
+            <div class="analytics-header">
+                <h2>📊 Study Analytics Dashboard</h2>
+                <p class="analytics-subtitle">Track your progress and improve your performance</p>
             </div>
             
-            <!-- Main Menu -->
-            <div id="mainMenu" class="menu">
-                <h2>Choose Your Course</h2>
-                <div class="subject-grid">
-                    <button onclick="showSubject('pmls401')" class="subject-btn">
-                        📚 PMLS 401<br>
-                        <small>Principles of Medical Laboratory Science</small>
-                    </button>
-                    <button onclick="showSubject('pmls402')" class="subject-btn">
-                        🧪 ANAPHY LEC<br>
-                        <small>Anatomy & Physiology Lecture</small>
-                    </button>
-                    <button onclick="showSubject('pmls403')" class="subject-btn">
-                        🧪 ANAPHY LEC Integumentary<br>
-                        <small>Integumentary System</small>
-                    </button>
-                </div>
-                
-                <!-- Comprehensive Board Exam Section -->
-                <div class="board-exam-section">
-                    <h3>🎓 Board Exam Preparation</h3>
-                    <div class="exam-grid">
-                        <button onclick="showBoardExamBriefing()" class="board-exam-btn">
-                            🏆 Comprehensive Board Exam<br>
-                            <small>100 Questions from All Subjects</small>
-                            <div class="exam-stats">📊 180 Total Flashcards • 95 Quiz Questions</div>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Board Exam Briefing -->
-            <div id="boardExamBriefing" class="menu hidden">
-                <div class="briefing-header">
-                    <h2>🎓 Comprehensive Board Exam</h2>
-                    <div class="briefing-subtitle">Medical Laboratory Science Comprehensive Assessment</div>
-                </div>
-                
-                <div class="briefing-content">
-                    <div class="exam-overview">
-                        <h3>📋 Exam Overview</h3>
-                        <p>This comprehensive exam simulates the actual Medical Technology Board Examination conditions to help you prepare for the real exam.</p>
-                    </div>
-                    
-                    <div class="exam-details">
-                        <div class="detail-card">
-                            <div class="detail-icon">📊</div>
-                            <div class="detail-info">
-                                <h4>Question Count</h4>
-                                <p>100 randomized questions from all subjects</p>
-                            </div>
-                        </div>
-                        
-                        <div class="detail-card">
-                            <div class="detail-icon">⏰</div>
-                            <div class="detail-info">
-                                <h4>Time Limit</h4>
-                                <p>1 hour (60 minutes) to complete</p>
-                            </div>
-                        </div>
-                        
-                        <div class="detail-card">
-                            <div class="detail-icon">📚</div>
-                            <div class="detail-info">
-                                <h4>Coverage</h4>
-                                <p>PMLS 401, ANAPHY LEC, Integumentary System</p>
-                            </div>
-                        </div>
-                        
-                        <div class="detail-card">
-                            <div class="detail-icon">🎯</div>
-                            <div class="detail-info">
-                                <h4>Passing Score</h4>
-                                <p>75% general average (similar to board exam)</p>
-                            </div>
+            <div class="analytics-content">
+                <!-- Study Overview Cards -->
+                <div class="analytics-overview">
+                    <div class="stat-card">
+                        <div class="stat-icon">🔥</div>
+                        <div class="stat-info">
+                            <h3 id="studyStreak">0</h3>
+                            <p>Day Study Streak</p>
                         </div>
                     </div>
                     
-                    <div class="exam-instructions">
-                        <h3>📝 Instructions</h3>
-                        <ul>
-                            <li>✅ Once started, the timer cannot be paused</li>
-                            <li>⚠️ The exam will auto-submit when time runs out</li>
-                            <li>💡 Read each question carefully before answering</li>
-                            <li>🔄 You can change answers before moving to the next question</li>
-                            <li>📊 Your performance will be evaluated at the end</li>
-                        </ul>
-                    </div>
-                    
-                    <div class="readiness-check">
-                        <h3>✨ Are You Ready?</h3>
-                        <p>Make sure you have:</p>
-                        <ul>
-                            <li>📖 Reviewed all your study materials</li>
-                            <li>⏰ Enough time to complete the full exam</li>
-                            <li>🔇 A quiet environment free from distractions</li>
-                            <li>💪 Confidence in your preparation</li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="briefing-actions">
-                    <button onclick="startComprehensiveBoardExam()" class="start-exam-btn">
-                        🚀 Start Board Exam
-                        <small>Begin 1-hour comprehensive assessment</small>
-                    </button>
-                    <button onclick="goToMainMenu()" class="back-btn">← Back to Main Menu</button>
-                </div>
-            </div>
-            
-            <!-- Subject Selection Screen -->
-            <div id="subjectMenu" class="menu hidden">
-                <h2 id="subjectTitle">Course Topics</h2>
-                <div id="topicGrid" class="topic-grid">
-                    <!-- Topics will be populated by JavaScript -->
-                </div>
-                
-                <!-- Subject Practice Exam Section -->
-                <div class="subject-exam-section">
-                    <h3>📋 Subject Practice & Mixed Quiz</h3>
-                    <p class="exam-description">Test your knowledge across all topics in this subject</p>
-                    <div class="subject-buttons">
-                        <button onclick="showSubjectMixedQuizSelector()" class="subject-exam-btn mixed-quiz-btn">
-                            🎯 Mixed Quiz<br>
-                            <small>Combine Multiple Topics</small>
-                        </button>
-                        <button onclick="startSubjectPracticeExam()" class="subject-exam-btn">
-                            📋 Practice Exam<br>
-                            <small>Questions from All Topics</small>
-                        </button>
-                    </div>
-                </div>
-                
-                <button onclick="goToMainMenu()" class="back-btn">← Back to Courses</button>
-            </div>
-            
-            <!-- Mode Selection Screen -->
-            <div id="modeSelector" class="menu hidden">
-                <h2 id="modeTitle">Choose Study Mode</h2>
-                <div class="topic-info">
-                    <h3 id="selectedCourse">Course: </h3>
-                    <h4 id="selectedTopic">Topic: </h4>
-                </div>
-                <div class="mode-buttons">
-                    <button onclick="startFlashcards()" class="mode-btn">
-                        📚 Flashcard Mode
-                        <small>Study with flip cards</small>
-                    </button>
-                    <button onclick="startQuiz()" class="mode-btn">
-                        🧠 Quiz Mode
-                        <small>Test your knowledge</small>
-                    </button>
-                    <button onclick="showTimedChallengeSelector()" class="mode-btn">
-                        ⏱️ Timed Challenge
-                        <small>Speed rounds with countdown</small>
-                    </button>
-                </div>
-                <button onclick="goToSubjectMenu()" class="back-btn">← Back to Topics</button>
-            </div>
-            
-            <!-- Flashcard Mode -->
-            <div id="flashcardMode" class="game-mode hidden">
-                <div class="game-header">
-                    <h2>📚 Flashcard Mode</h2>
-                    <div class="breadcrumb">
-                        <span id="flashcardCourse">PMLS 401</span> > 
-                        <span id="flashcardTopic">History of Medical Technology</span>
-                    </div>
-                    <p class="instruction">Click the card to flip between question and answer!</p>
-                </div>
-                
-                <div id="flashcard" class="flashcard" onclick="flipCard()">
-                    <div class="card-content">
-                        Click to start studying!
-                    </div>
-                    <div class="flip-hint">💡 Click to flip</div>
-                    <div class="notes-section">
-                        <textarea id="cardNotes" placeholder="Add your personal notes for this card..." class="card-notes hidden"></textarea>
-                        <button onclick="toggleNotes()" class="notes-toggle">📝 Notes</button>
-                    </div>
-                </div>
-                
-                <div class="card-controls">
-                    <button onclick="previousCard()" id="prevBtn">← Previous</button>
-                    <button onclick="shuffleCards()" class="shuffle-btn">🔀 Shuffle</button>
-                    <button onclick="nextCard()" id="nextBtn">Next →</button>
-                </div>
-                
-                <div class="card-info">
-                    <p id="cardCounter">Card 1 of 24</p>
-                    <div class="progress-bar">
-                        <div id="progressFill" class="progress-fill"></div>
-                    </div>
-                    <button onclick="goToModeSelector()" class="back-btn">← Back to Study Modes</button>
-                </div>
-            </div>
-            
-            <!-- Quiz Mode -->
-            <div id="quizMode" class="game-mode hidden">
-                <div class="game-header">
-                    <h2>🧠 Quiz Mode</h2>
-                    <div class="breadcrumb">
-                        <span id="quizCourse">PMLS 401</span> > 
-                        <span id="quizTopic">History of Medical Technology</span>
-                    </div>
-                </div>
-                
-                <div class="quiz-container">
-                    <div id="quizQuestion" class="quiz-question"></div>
-                    <div id="quizOptions" class="quiz-options"></div>
-                    <div id="quizResult" class="quiz-result"></div>
-                </div>
-                
-                <div class="quiz-info">
-                    <div class="score-container">
-                        <div class="score">
-                            Score: <span id="scoreDisplay">0/0</span>
-                        </div>
-                        <div class="question-counter">
-                            Question <span id="questionCounter">1</span> of <span id="totalQuestions">10</span>
+                    <div class="stat-card">
+                        <div class="stat-icon">⏱️</div>
+                        <div class="stat-info">
+                            <h3 id="totalStudyTime">0h 0m</h3>
+                            <p>Total Study Time</p>
                         </div>
                     </div>
                     
-                    <div class="quiz-controls">
-                        <button id="nextQuizBtn" onclick="nextQuestion()" class="hidden">Next Question →</button>
-                        <button id="restartBtn" onclick="restartQuiz()" class="hidden">🔄 Try Again</button>
-                        <button onclick="goToModeSelector()" class="back-btn">← Back to Study Modes</button>
+                    <div class="stat-card">
+                        <div class="stat-icon">🎯</div>
+                        <div class="stat-info">
+                            <h3 id="averageScore">0%</h3>
+                            <p>Average Score</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">📚</div>
+                        <div class="stat-info">
+                            <h3 id="totalSessions">0</h3>
+                            <p>Study Sessions</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-            
-            <!-- Results Summary -->
-            <div id="resultsMode" class="game-mode hidden">
-                <div class="game-header">
-                    <h2>🎯 Quiz Results</h2>
-                </div>
                 
-                <div class="results-container">
-                    <div id="finalScore" class="final-score"></div>
-                    <div id="performance" class="performance"></div>
-                    <div id="encouragement" class="encouragement"></div>
-                </div>
-                
-                <div class="results-actions">
-                    <button onclick="restartQuiz()" class="action-btn">🔄 Retake Quiz</button>
-                    <button onclick="goToModeSelector()" class="action-btn">📚 Study More</button>
-                    <button onclick="goToMainMenu()" class="back-btn">← Main Menu</button>
-                </div>
-            </div>
-
-            <!-- Mixed Quiz Selector -->
-            <div id="mixedQuizSelector" class="menu hidden">
-                <h2>🎯 Mixed Quiz Setup</h2>
-                <p class="instruction">Select topics to combine in your quiz:</p>
-                
-                <div class="topic-selection">
-                    <div id="mixedTopicList" class="checkbox-list">
+                <!-- Subject Performance -->
+                <div class="analytics-section">
+                    <h3>📋 Subject Performance</h3>
+                    <div id="subjectPerformance" class="subject-performance">
                         <!-- Will be populated by JavaScript -->
                     </div>
                 </div>
                 
-                <div class="quiz-settings">
-                    <label>Number of questions: <input type="number" id="mixedQuestionCount" min="5" max="50" value="20"></label>
-                </div>
-                
-                <div class="action-buttons">
-                    <button onclick="startMixedQuiz()" class="mode-btn">🚀 Start Mixed Quiz</button>
-                    <button onclick="goBackFromMixedQuiz()" class="back-btn">← Back</button>
-                </div>
-            </div>
-
-            <!-- Timed Challenge Selector -->
-            <div id="timedChallengeSelector" class="menu hidden">
-                <h2>⏱️ Timed Challenge Setup</h2>
-                <div class="challenge-options">
-                    <div class="time-option">
-                        <h3>⚡ Lightning Round</h3>
-                        <p>30 seconds per question</p>
-                        <button onclick="startTimedChallenge(30)" class="mode-btn">Start Lightning</button>
-                    </div>
-                    <div class="time-option">
-                        <h3>🔥 Speed Challenge</h3>
-                        <p>60 seconds per question</p>
-                        <button onclick="startTimedChallenge(60)" class="mode-btn">Start Speed</button>
-                    </div>
-                    <div class="time-option">
-                        <h3>🎯 Focus Mode</h3>
-                        <p>90 seconds per question</p>
-                        <button onclick="startTimedChallenge(90)" class="mode-btn">Start Focus</button>
-                    </div>
-                </div>
-                <button onclick="goToModeSelector()" class="back-btn">← Back</button>
-            </div>
-
-            <!-- Practice Exam Selector -->
-            <div id="practiceExamSelector" class="menu hidden">
-                <h2>📋 Practice Exam Setup</h2>
-                <div class="exam-options">
-                    <div class="exam-option">
-                        <h3>📚 Subject Focus Exam</h3>
-                        <p>50 questions from current subject</p>
-                        <button onclick="startPracticeExam('subject')" class="mode-btn">Start Subject Exam</button>
-                    </div>
-                </div>
-                <p class="exam-note">💡 For the comprehensive board exam with all subjects, use the main menu option!</p>
-                <button onclick="goToModeSelector()" class="back-btn">← Back</button>
-            </div>
-
-            <!-- Timed Quiz Mode -->
-            <div id="timedQuizMode" class="game-mode hidden">
-                <div class="game-header">
-                    <h2>⏱️ Timed Challenge</h2>
-                    <div class="timer-display">
-                        <div id="timeRemaining" class="timer">00:30</div>
-                        <div class="timer-label">Time Remaining</div>
+                <!-- Recent Activity -->
+                <div class="analytics-section">
+                    <h3>📅 Recent Study Sessions</h3>
+                    <div id="recentActivity" class="recent-activity">
+                        <!-- Will be populated by JavaScript -->
                     </div>
                 </div>
                 
-                <div class="quiz-container">
-                    <div id="timedQuizQuestion" class="quiz-question"></div>
-                    <div id="timedQuizOptions" class="quiz-options"></div>
-                    <div id="timedQuizResult" class="quiz-result"></div>
+                <!-- Board Exam Readiness -->
+                <div class="analytics-section">
+                    <h3>🎓 Board Exam Readiness</h3>
+                    <div class="readiness-meter">
+                        <div class="readiness-progress">
+                            <div id="readinessBar" class="readiness-fill" style="width: 0%"></div>
+                        </div>
+                        <div class="readiness-info">
+                            <span id="readinessScore">0%</span>
+                            <span id="readinessLabel">Keep Studying!</span>
+                        </div>
+                    </div>
                 </div>
                 
-                <div class="quiz-info">
-                    <div class="score-container">
-                        <div class="score">Score: <span id="timedScoreDisplay">0/0</span></div>
-                        <div class="question-counter">Question <span id="timedQuestionCounter">1</span> of <span id="timedTotalQuestions">10</span></div>
+                <!-- Study Goals -->
+                <div class="analytics-section">
+                    <h3>🎯 Daily Goal</h3>
+                    <div class="goal-progress">
+                        <div class="goal-bar">
+                            <div id="goalProgress" class="goal-fill" style="width: 0%"></div>
+                        </div>
+                        <p id="goalText">0 / 30 minutes studied today</p>
                     </div>
+                </div>
+            </div>
+            
+            <div class="analytics-actions">
+                <button onclick="resetAnalytics()" class="reset-btn">🔄 Reset Analytics</button>
+                <button onclick="goToMainMenu()" class="back-btn">← Back to Main Menu</button>
+            </div>
+        </div>
+        
+        <!-- Main Menu -->
+        <div id="mainMenu" class="menu">
+            <h2>Choose Your Subject</h2>
+            <div class="subject-grid">
+                <button onclick="showSubject('pmls401')" class="subject-btn">
+                    📚 PMLS 401<br>
+                    <small>Principles of Medical Laboratory Science</small>
+                </button>
+                <button onclick="showSubject('pmls402')" class="subject-btn">
+                    🧪 ANAPHY LEC<br>
+                    <small>Anatomy & Physiology Lecture</small>
+                </button>
+                <button onclick="showSubject('pmls403')" class="subject-btn">
+                    🧪 ANAPHY LEC Integumentary<br>
+                    <small>Integumentary System</small>
+                </button>
+            </div>
+            
+            <!-- Comprehensive Board Exam Section -->
+            <div class="board-exam-section">
+                <h3>🎓Exam Preparation</h3>
+                <div class="exam-grid">
+                    <button onclick="showBoardExamBriefing()" class="board-exam-btn">
+                        🏆 Comprehensive Exam<br>
+                        <small>100 Questions from All Subjects</small>
+                        <div class="exam-stats">📊 180 Total Flashcards • 95 Quiz Questions</div>
+                    </button>
                 </div>
             </div>
         </div>
 
-        <script src="script.js"></script>
-    </body>
-    </html>
+        <!-- Board Exam Briefing -->
+        <div id="boardExamBriefing" class="menu hidden">
+            <div class="briefing-header">
+                <h2>🎓 Comprehensive Exam</h2>
+                <div class="briefing-subtitle">Medical Laboratory Science Comprehensive Assessment</div>
+            </div>
+            
+            <div class="briefing-content">
+                <div class="exam-overview">
+                    <h3>📋 Exam Overview</h3>
+                    <p>This comprehensive exam simulates the actual Medical Technology Board Examination conditions to help you prepare for the real exam.</p>
+                </div>
+                
+                <div class="exam-details">
+                    <div class="detail-card">
+                        <div class="detail-icon">📊</div>
+                        <div class="detail-info">
+                            <h4>Question Count</h4>
+                            <p>100 randomized questions from all subjects</p>
+                        </div>
+                    </div>
+                    
+                    <div class="detail-card">
+                        <div class="detail-icon">⏰</div>
+                        <div class="detail-info">
+                            <h4>Time Limit</h4>
+                            <p>1 hour (60 minutes) to complete</p>
+                        </div>
+                    </div>
+                    
+                    <div class="detail-card">
+                        <div class="detail-icon">📚</div>
+                        <div class="detail-info">
+                            <h4>Coverage</h4>
+                            <p>PMLS 401, ANAPHY LEC, Integumentary System</p>
+                        </div>
+                    </div>
+                    
+                    <div class="detail-card">
+                        <div class="detail-icon">🎯</div>
+                        <div class="detail-info">
+                            <h4>Passing Score</h4>
+                            <p>75% general average (similar to board exam)</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="exam-instructions">
+                    <h3>📝 Instructions</h3>
+                    <ul>
+                        <li>✅ Once started, the timer cannot be paused</li>
+                        <li>⚠️ The exam will auto-submit when time runs out</li>
+                        <li>💡 Read each question carefully before answering</li>
+                        <li>🔄 You can change answers before moving to the next question</li>
+                        <li>📊 Your performance will be evaluated at the end</li>
+                    </ul>
+                </div>
+                
+                <div class="readiness-check">
+                    <h3>✨ Are You Ready?</h3>
+                    <p>Make sure you have:</p>
+                    <ul>
+                        <li>📖 Reviewed all your study materials</li>
+                        <li>⏰ Enough time to complete the full exam</li>
+                        <li>🔇 A quiet environment free from distractions</li>
+                        <li>💪 Confidence in your preparation</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="briefing-actions">
+                <button onclick="startComprehensiveBoardExam()" class="start-exam-btn">
+                    🚀 Start Exam
+                    <small>Begin 1-hour comprehensive assessment</small>
+                </button>
+                <button onclick="goToMainMenu()" class="back-btn">← Back to Main Menu</button>
+            </div>
+        </div>
+        
+        <!-- Subject Selection Screen -->
+        <div id="subjectMenu" class="menu hidden">
+            <h2 id="subjectTitle">Course Topics</h2>
+            <div id="topicGrid" class="topic-grid">
+                <!-- Topics will be populated by JavaScript -->
+            </div>
+            
+            <!-- Subject Practice Exam Section -->
+            <div class="subject-exam-section">
+                <h3>📋 Subject Practice & Mixed Quiz</h3>
+                <p class="exam-description">Test your knowledge across all topics in this subject</p>
+                <div class="subject-buttons">
+                    <button onclick="showSubjectMixedQuizSelector()" class="subject-exam-btn mixed-quiz-btn">
+                        🎯 Mixed Quiz<br>
+                        <small>Combine Multiple Topics</small>
+                    </button>
+                    <button onclick="startSubjectPracticeExam()" class="subject-exam-btn">
+                        📋 Practice Exam<br>
+                        <small>Questions from All Topics</small>
+                    </button>
+                </div>
+            </div>
+            
+            <button onclick="goToMainMenu()" class="back-btn">← Back to Courses</button>
+        </div>
+        
+        <!-- Mode Selection Screen -->
+        <div id="modeSelector" class="menu hidden">
+            <h2 id="modeTitle">Choose Study Mode</h2>
+            <div class="topic-info">
+                <h3 id="selectedCourse">Course: </h3>
+                <h4 id="selectedTopic">Topic: </h4>
+            </div>
+            <div class="mode-buttons">
+                <button onclick="startFlashcards()" class="mode-btn">
+                    📚 Flashcard Mode
+                    <small>Study with flip cards</small>
+                </button>
+                <button onclick="startQuiz()" class="mode-btn">
+                    🧠 Quiz Mode
+                    <small>Test your knowledge</small>
+                </button>
+                <button onclick="showTimedChallengeSelector()" class="mode-btn">
+                    ⏱️ Timed Challenge
+                    <small>Speed rounds with countdown</small>
+                </button>
+            </div>
+            <button onclick="goToSubjectMenu()" class="back-btn">← Back to Topics</button>
+        </div>
+        
+        <!-- Flashcard Mode -->
+        <div id="flashcardMode" class="game-mode hidden">
+            <div class="game-header">
+                <h2>📚 Flashcard Mode</h2>
+                <div class="breadcrumb">
+                    <span id="flashcardCourse">PMLS 401</span> > 
+                    <span id="flashcardTopic">History of Medical Technology</span>
+                </div>
+                <p class="instruction">Click the card to flip between question and answer!</p>
+            </div>
+            
+            <div id="flashcard" class="flashcard" onclick="flipCard()">
+                <div class="card-content">
+                    Click to start studying!
+                </div>
+                <div class="flip-hint">💡 Click to flip</div>
+                <div class="notes-section">
+                    <textarea id="cardNotes" placeholder="Add your personal notes for this card..." class="card-notes hidden"></textarea>
+                    <button onclick="toggleNotes()" class="notes-toggle">📝 Notes</button>
+                </div>
+            </div>
+            
+            <div class="card-controls">
+                <button onclick="previousCard()" id="prevBtn">← Previous</button>
+                <button onclick="shuffleCards()" class="shuffle-btn">🔀 Shuffle</button>
+                <button onclick="nextCard()" id="nextBtn">Next →</button>
+            </div>
+            
+            <div class="card-info">
+                <p id="cardCounter">Card 1 of 24</p>
+                <div class="progress-bar">
+                    <div id="progressFill" class="progress-fill"></div>
+                </div>
+                <button onclick="goToModeSelector()" class="back-btn">← Back to Study Modes</button>
+            </div>
+        </div>
+        
+        <!-- Quiz Mode -->
+        <div id="quizMode" class="game-mode hidden">
+            <div class="game-header">
+                <h2>🧠 Quiz Mode</h2>
+                <div class="breadcrumb">
+                    <div class="quiz-info">
+                        <span id="quizCourse"></span> > <span id="quizTopic"></span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="quiz-container">
+                <div id="quizQuestion" class="quiz-question">
+                    <button onclick="toggleBookmark()" class="bookmark-btn" id="bookmarkBtn">🔖 Bookmark</button>
+                </div>
+                <div id="quizOptions" class="quiz-options"></div>
+                <div id="quizResult" class="quiz-result"></div>
+            </div>
+            
+            <div class="quiz-info">
+                <div class="score-container">
+                    <div class="score">
+                        Score: <span id="scoreDisplay">0/0</span>
+                    </div>
+                    <div class="question-counter">
+                        Question <span id="questionCounter">1</span> of <span id="totalQuestions">10</span>
+                    </div>
+                </div>
+                
+                <div class="quiz-controls">
+                    <button id="nextQuizBtn" onclick="nextQuestion()" class="hidden">Next Question →</button>
+                    <button id="restartBtn" onclick="restartQuiz()" class="hidden">🔄 Try Again</button>
+                    <button onclick="goToModeSelector()" class="back-btn">← Back to Study Modes</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Results Summary -->
+        <div id="resultsMode" class="game-mode hidden">
+            <div class="game-header">
+                <h2>🎯 Quiz Results</h2>
+            </div>
+            
+            <div class="results-container">
+                <div id="finalScore" class="final-score"></div>
+                <div id="performance" class="performance"></div>
+                <div id="encouragement" class="encouragement"></div>
+            </div>
+            
+            <div class="results-actions">
+                <button onclick="restartQuiz()" class="action-btn">🔄 Retake Quiz</button>
+                <button onclick="goToModeSelector()" class="action-btn">📚 Study More</button>
+                <button onclick="goToMainMenu()" class="back-btn">← Main Menu</button>
+            </div>
+        </div>
 
-        <script src="script.js"></script>
-    </body>
+        <!-- Mixed Quiz Selector -->
+        <div id="mixedQuizSelector" class="menu hidden">
+            <h2>🎯 Mixed Quiz Setup</h2>
+            <p class="instruction">Select topics to combine in your quiz:</p>
+            
+            <div class="topic-selection">
+                <div id="mixedTopicList" class="checkbox-list">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+            
+            <div class="quiz-settings">
+                <label>Number of questions: <input type="number" id="mixedQuestionCount" min="5" max="50" value="20"></label>
+            </div>
+            
+            <div class="action-buttons">
+                <button onclick="startMixedQuiz()" class="mode-btn">🚀 Start Mixed Quiz</button>
+                <button onclick="goBackFromMixedQuiz()" class="back-btn">← Back</button>
+            </div>
+        </div>
 
-    </html>
+        <!-- Timed Challenge Selector -->
+        <div id="timedChallengeSelector" class="menu hidden">
+            <h2>⏱️ Timed Challenge Setup</h2>
+            <div class="challenge-options">
+                <div class="time-option">
+                    <h3>⚡ Lightning Round</h3>
+                    <p>30 seconds per question</p>
+                    <button onclick="startTimedChallenge(30)" class="mode-btn">Start Lightning</button>
+                </div>
+                <div class="time-option">
+                    <h3>🔥 Speed Challenge</h3>
+                    <p>60 seconds per question</p>
+                    <button onclick="startTimedChallenge(60)" class="mode-btn">Start Speed</button>
+                </div>
+                <div class="time-option">
+                    <h3>🎯 Focus Mode</h3>
+                    <p>90 seconds per question</p>
+                    <button onclick="startTimedChallenge(90)" class="mode-btn">Start Focus</button>
+                </div>
+            </div>
+            <button onclick="goToModeSelector()" class="back-btn">← Back</button>
+        </div>
+
+        <!-- Practice Exam Selector -->
+        <div id="practiceExamSelector" class="menu hidden">
+            <h2>📋 Practice Exam Setup</h2>
+            <div class="exam-options">
+                <div class="exam-option">
+                    <h3>📚 Subject Focus Exam</h3>
+                    <p>50 questions from current subject</p>
+                    <button onclick="startPracticeExam('subject')" class="mode-btn">Start Subject Exam</button>
+                </div>
+            </div>
+            <p class="exam-note">💡 For the comprehensive board exam with all subjects, use the main menu option!</p>
+            <button onclick="goToModeSelector()" class="back-btn">← Back</button>
+        </div>
+
+        <!-- Timed Quiz Mode -->
+        <div id="timedQuizMode" class="game-mode hidden">
+            <div class="game-header">
+                <h2>⏱️ Timed Challenge</h2>
+                <div class="timer-display">
+                    <div id="timeRemaining" class="timer">00:30</div>
+                    <div class="timer-label">Time Remaining</div>
+                </div>
+            </div>
+            
+            <div class="quiz-container">
+                <div id="timedQuizQuestion" class="quiz-question"></div>
+                <div id="timedQuizOptions" class="quiz-options"></div>
+                <div id="timedQuizResult" class="quiz-result"></div>
+            </div>
+            
+            <div class="quiz-info">
+                <div class="score-container">
+                    <div class="score">Score: <span id="timedScoreDisplay">0/0</span></div>
+                    <div class="question-counter">Question <span id="timedQuestionCounter">1</span> of <span id="timedTotalQuestions">10</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Saved Questions Mode -->
+        <div id="savedQuestionsMode" class="menu hidden">
+            <div class="container">
+                <div class="header">
+                    <h2>📖 Saved Questions</h2>
+                    <p>Review questions you've bookmarked for extra practice</p>
+                </div>
+                
+                <div class="saved-questions-actions">
+                    <button onclick="startBookmarkedQuestionsQuiz()" class="action-btn start-quiz">
+                        🎯 Practice Saved Questions
+                    </button>
+                    <div class="saved-actions-right">
+                        <div class="saved-stats">
+                            <span id="totalBookmarkedCount">0 questions saved</span>
+                        </div>
+                        <button onclick="clearAllBookmarks()" class="clear-all-btn" id="clearAllBtn">
+                            🗑️ Clear All
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="savedQuestionsList" class="saved-questions-container">
+                    <!-- Bookmarked questions will be populated here -->
+                </div>
+                <button onclick="goToMainMenu()" class="back-btn">← Back to Main Menu</button>  
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
