@@ -13,6 +13,7 @@ let timePerQuestion = 60;
 let cardNotes = {}; // Store notes for each card
 let bookmarkedQuestions = {}; // Store bookmarked questions
 let isComprehensiveBoardExam = false; // Track if we're in board exam mode
+let customFlashcards = {}; // Store custom flashcards by subject and topic
 
 // Analytics Variables
 let analyticsData = {
@@ -29,7 +30,9 @@ const validCredentials = [
     { username: 'Monique', password: 'iloveyou' },
     { username: 'Admin', password: 'moniki' },
     { username: 'Samantha', password: 'impretty' },
-    { username: 'Chris Ann', password: 'wawix' }
+    { username: 'Chris Ann', password: 'wawix' },
+    // Added public beta account
+    { username: 'public', password: 'beta123' }
 ];
 
 // Authentication Functions
@@ -212,6 +215,7 @@ function updateStudyStreak() {
 
 function showAnalytics() {
     document.querySelectorAll('.menu, .game-mode').forEach(el => el.classList.add('hidden'));
+    document.getElementById('updatesModal').classList.add('hidden');
     document.getElementById('analyticsMode').classList.remove('hidden');
     updateAnalyticsDashboard();
 }
@@ -376,6 +380,150 @@ function getTimeAgo(date) {
     if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)} hours ago`;
     if (diffInSeconds < 2592000) return `${Math.floor(diffInSeconds / 86400)} days ago`;
     return date.toLocaleDateString();
+}
+
+// Custom Flashcards System
+function loadCustomFlashcards() {
+    const currentUsername = localStorage.getItem('username');
+    const saved = localStorage.getItem('customFlashcards_' + currentUsername);
+    if (saved) {
+        try {
+            customFlashcards = JSON.parse(saved);
+        } catch (e) {
+            console.error('Error loading custom flashcards:', e);
+            customFlashcards = {};
+        }
+    }
+}
+
+function saveCustomFlashcards() {
+    const currentUsername = localStorage.getItem('username');
+    try {
+        localStorage.setItem('customFlashcards_' + currentUsername, JSON.stringify(customFlashcards));
+        console.log('Custom flashcards saved successfully');
+    } catch (e) {
+        console.error('Error saving custom flashcards:', e);
+    }
+}
+
+function showAddCustomFlashcardModal() {
+    const modal = document.createElement('div');
+    modal.className = 'custom-flashcard-modal';
+    modal.innerHTML = `
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>➕ Add Custom Flashcard</h3>
+                <button onclick="closeCustomFlashcardModal()" class="close-btn">✖️</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="customFront">🔍 Question/Front Side:</label>
+                    <textarea id="customFront" placeholder="Enter your question here..." rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="customBack">💡 Answer/Back Side:</label>
+                    <textarea id="customBack" placeholder="Enter the answer here..." rows="3" required></textarea>
+                </div>
+                <div class="form-actions">
+                    <button onclick="saveCustomFlashcard()" class="save-btn">💾 Save Flashcard</button>
+                    <button onclick="closeCustomFlashcardModal()" class="cancel-btn">❌ Cancel</button>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    document.getElementById('customFront').focus();
+}
+
+function closeCustomFlashcardModal() {
+    const modal = document.querySelector('.custom-flashcard-modal');
+    if (modal) {
+        modal.remove();
+    }
+}
+
+function saveCustomFlashcard() {
+    const front = document.getElementById('customFront').value.trim();
+    const back = document.getElementById('customBack').value.trim();
+    
+    if (!front || !back) {
+        alert('⚠️ Please fill in both the question and answer fields!');
+        return;
+    }
+    
+    // Initialize structure if needed
+    if (!customFlashcards[currentSubject]) {
+        customFlashcards[currentSubject] = {};
+    }
+    if (!customFlashcards[currentSubject][currentTopic]) {
+        customFlashcards[currentSubject][currentTopic] = [];
+    }
+    
+    // Add the new flashcard
+    const newCard = {
+        question: front,
+        answer: back,
+        dateAdded: new Date().toISOString(),
+        id: Date.now(),
+        isCustom: true
+    };
+    
+    customFlashcards[currentSubject][currentTopic].push(newCard);
+    saveCustomFlashcards();
+    
+    // Update the current flashcards array to include custom ones
+    loadFlashcardsForTopic();
+    
+    closeCustomFlashcardModal();
+    
+    // Show success message
+    showSuccessMessage(`✅ Custom flashcard added successfully! You now have ${getCurrentFlashcardCount()} total flashcards for this topic.`);
+}
+
+function loadFlashcardsForTopic() {
+    // Get original flashcards
+    const subject = courseData[currentSubject];
+    const topic = subject.topics[currentTopic];
+    const courseFlashcards = topic.flashcards || [];
+    
+    // Get custom flashcards
+    const customCards = (customFlashcards[currentSubject] && customFlashcards[currentSubject][currentTopic]) 
+        ? customFlashcards[currentSubject][currentTopic] 
+        : [];
+    
+    // Combine them - making sure custom cards follow the same structure
+    currentFlashcards = [
+        ...courseFlashcards,
+        ...customCards.map(card => ({
+            question: card.question,
+            answer: card.answer,
+            isCustom: true,
+            id: card.id
+        }))
+    ];
+    
+    console.log(`Loaded ${courseFlashcards.length} original + ${customCards.length} custom flashcards`);
+}
+
+function getCurrentFlashcardCount() {
+    return currentFlashcards.length;
+}
+
+function showSuccessMessage(message) {
+    const successDiv = document.createElement('div');
+    successDiv.className = 'success-message';
+    successDiv.innerHTML = `
+        <div class="success-content">
+            ${message}
+        </div>
+    `;
+    
+    document.body.appendChild(successDiv);
+    
+    setTimeout(() => {
+        successDiv.remove();
+    }, 3000);
 }
 
 // Data Structure for all courses
@@ -1650,22 +1798,51 @@ function selectTopic(topicId) {
     
     document.getElementById('selectedCourse').textContent = `Course: ${subject.title}`;
     document.getElementById('selectedTopic').textContent = `Topic: ${topic.title}`;
+    
+    // Add custom flashcard button to mode selector
+    const modeButtons = document.querySelector('.mode-buttons');
+    
+    // Remove existing custom button if present
+    const existingCustomBtn = document.getElementById('customFlashcardBtn');
+    if (existingCustomBtn) {
+        existingCustomBtn.remove();
+    }
+    
+    // Add the custom flashcard button
+    const customButton = document.createElement('button');
+    customButton.id = 'customFlashcardBtn';
+    customButton.className = 'mode-btn custom-flashcard-btn';
+    customButton.onclick = showAddCustomFlashcardModal;
+    
+    const customCount = (customFlashcards[currentSubject] && customFlashcards[currentSubject][currentTopic]) 
+        ? customFlashcards[currentSubject][currentTopic].length 
+        : 0;
+    
+    customButton.innerHTML = `
+        ➕ Add Custom Flashcard
+        <small>Create your own study cards (${customCount} custom cards)</small>
+    `;
+    
+    modeButtons.appendChild(customButton);
 }
 
 function goToMainMenu() {
     document.querySelectorAll('.menu, .game-mode').forEach(el => el.classList.add('hidden'));
+    document.getElementById('updatesModal').classList.add('hidden');
     document.getElementById('mainMenu').classList.remove('hidden');
     resetGameStates();
 }
 
 function goToSubjectMenu() {
     document.querySelectorAll('.menu, .game-mode').forEach(el => el.classList.add('hidden'));
+    document.getElementById('updatesModal').classList.add('hidden');
     document.getElementById('subjectMenu').classList.remove('hidden');
     resetGameStates();
 }
 
 function goToModeSelector() {
     document.querySelectorAll('.menu, .game-mode').forEach(el => el.classList.add('hidden'));
+    document.getElementById('updatesModal').classList.add('hidden');
     
     // Check if we're coming from a comprehensive board exam
     if (isComprehensiveBoardExam) {
@@ -1724,7 +1901,15 @@ function startFlashcards() {
     document.getElementById('flashcardCourse').textContent = subject.title;
     document.getElementById('flashcardTopic').textContent = topic.title;
     
-    currentFlashcards = [...topic.flashcards];
+    // Load flashcards including custom ones
+    loadFlashcardsForTopic();
+    
+    if (currentFlashcards.length === 0) {
+        document.querySelector('.card-content').innerHTML = 
+            '📝 No flashcards available for this topic yet.<br><br>🎯 Go back and add some custom flashcards to get started!';
+        return;
+    }
+    
     currentFlashcard = 0;
     isFlipped = false;
     
@@ -2231,6 +2416,7 @@ function autoBookmarkIncorrectAnswer(question, wasCorrect) {
 
 function showSavedQuestions() {
     document.querySelectorAll('.menu, .game-mode').forEach(el => el.classList.add('hidden'));
+    document.getElementById('updatesModal').classList.add('hidden');
     document.getElementById('savedQuestionsMode').classList.remove('hidden');
     updateSavedQuestionsList();
 }
@@ -2347,6 +2533,47 @@ function clearAllBookmarks() {
         setTimeout(() => {
             alert(`✅ All bookmarks cleared successfully!`);
         }, 100);
+    }
+}
+
+// Updates Modal Functions
+function showUpdates() {
+    document.querySelectorAll('.menu, .game-mode').forEach(el => el.classList.add('hidden'));
+    document.getElementById('updatesModal').classList.remove('hidden');
+    document.body.classList.add('modal-open');
+    
+    // Add click-outside-to-close functionality
+    const modal = document.getElementById('updatesModal');
+    const modalContent = modal.querySelector('.updates-modal-content');
+    
+    modal.onclick = function(e) {
+        if (e.target === modal) {
+            closeUpdates();
+        }
+    };
+    
+    modalContent.onclick = function(e) {
+        e.stopPropagation();
+    };
+    
+    // Add escape key listener
+    document.addEventListener('keydown', handleUpdatesEscape);
+}
+
+function closeUpdates() {
+    document.getElementById('updatesModal').classList.add('hidden');
+    document.body.classList.remove('modal-open');
+    
+    // Remove escape key listener
+    document.removeEventListener('keydown', handleUpdatesEscape);
+    
+    goToMainMenu();
+}
+
+// Handle escape key for updates modal
+function handleUpdatesEscape(e) {
+    if (e.key === 'Escape') {
+        closeUpdates();
     }
 }
 
@@ -2879,3 +3106,8 @@ function startBoardExamTimer() {
         timeLeft--;
     }, 1000);
 }
+
+// Initialize custom flashcards when the page loads
+document.addEventListener('DOMContentLoaded', function() {
+    loadCustomFlashcards();
+});
