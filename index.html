@@ -46,6 +46,7 @@
             <div class="header-buttons">
                 <button onclick="showAnalytics()" class="analytics-toggle" id="analyticsToggle">📊 Analytics</button>
                 <button onclick="showSavedQuestions()" class="saved-questions-btn" id="savedQuestionsBtn">📖 Saved Questions</button>
+                <button onclick="showUpdates()" class="updates-btn" id="updatesBtn">🆕 Updates</button>
                 <div class="settings-dropdown">
                     <button onclick="toggleSettingsDropdown()" class="settings-btn" id="settingsBtn">⚙️ Settings</button>
                     <div class="settings-menu hidden" id="settingsMenu">
@@ -153,39 +154,73 @@
             </div>
         </div>
         
+        
+        
         <!-- Main Menu -->
         <div id="mainMenu" class="menu">
-            <h2>Choose Your Subject</h2>
-            <div class="subject-grid">
-                <button onclick="showSubject('pmls401')" class="subject-btn">
-                    📚 PMLS 401<br>
-                    <small>Principles of Medical Laboratory Science</small>
-                </button>
-                <button onclick="showSubject('pmls402')" class="subject-btn">
-                    🧪 ANAPHY LEC<br>
-                    <small>Anatomy & Physiology Lecture</small>
-                </button>
-                <button onclick="showSubject('pmls403')" class="subject-btn">
-                    🧪 ANAPHY LEC Integumentary<br>
-                    <small>Integumentary System</small>
-                </button>
-                <button onclick="showSubject('pmls404')" class="subject-btn">
-                    💪 Muscular 101<br>
-                    <small>Muscular System</small>
-                </button>
-                <button onclick="showSubject('pmls405')" class="subject-btn">
-                    🧪 CHEM 101<br>
-                    <small>Chemical Bonding</small>
-                </button>
+            <h2>🎓 Medical Laboratory Science Program</h2>
+            <p class="program-subtitle">Select Your Semester</p>
+            
+            <!-- Semester 1 -->
+            <div class="semester-section">
+                <div class="semester-header">
+                    <h3>📚 Semester 1</h3>
+                    <p class="semester-subtitle">Foundation Courses</p>
+                </div>
+                <div class="subject-grid">
+                    <button onclick="showSubject('pmls401')" class="subject-btn">
+                        📚 PMLS 401<br>
+                        <small>Principles of Medical Laboratory Science</small>
+                    </button>
+                    <button onclick="showSubject('pmls402')" class="subject-btn">
+                        🧪 ANAPHY LEC<br>
+                        <small>Anatomy & Physiology Lecture</small>
+                    </button>
+                    <button onclick="showSubject('pmls403')" class="subject-btn">
+                        🧪 ANAPHY LEC Integumentary<br>
+                        <small>Integumentary System</small>
+                    </button>
+                    <button onclick="showSubject('pmls404')" class="subject-btn">
+                        💪 Muscular System<br>
+                        <small>Muscular System</small>
+                    </button>
+                    <button onclick="showSubject('pmls405')" class="subject-btn">
+                        🧪 CHEM 101<br>
+                        <small>Chemical Bonding</small>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Semester 2 -->
+            <div class="semester-section">
+                <div class="semester-header">
+                    <h3>📖 Semester 2</h3>
+                    <p class="semester-subtitle">Advanced Studies</p>
+                </div>
+                <div class="subject-grid">
+                    <div class="coming-soon-card">
+                        <div class="coming-soon-content">
+                            <div class="coming-soon-icon">🚧</div>
+                            <h4>Coming Soon!</h4>
+                            <p>Advanced courses will be available in the next update</p>
+                            <div class="preview-subjects">
+                                <span class="preview-subject">🩸 Hematology</span>
+                                <span class="preview-subject">🦠 Microbiology</span>
+                                <span class="preview-subject">🧬 Clinical Chemistry</span>
+                                <span class="preview-subject">🔬 Immunology</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             
             <!-- Comprehensive Board Exam Section -->
             <div class="board-exam-section">
-                <h3>🎓Exam Preparation</h3>
+                <h3>🎓 Exam Preparation</h3>
                 <div class="exam-grid">
                     <button onclick="showBoardExamBriefing()" class="board-exam-btn">
                         🏆 Comprehensive Exam<br>
-                        <small>100 Questions from All Subjects</small>
+                        <small>100 Questions from Semester 1</small>
                         <div class="exam-stats">📊 180 Total Flashcards • 95 Quiz Questions</div>
                     </button>
                 </div>
@@ -526,6 +561,148 @@
         </div>
     </div>
 
+    <!-- Updates Modal (relocated to end of body for proper overlay behavior) -->
+    <div id="updatesModal" class="updates-modal hidden" aria-hidden="true" role="dialog" aria-label="What's New Updates">
+        <div class="updates-modal-content" role="document">
+            <div class="updates-header">
+                <h2>🆕 What's New Today!</h2>
+                <button onclick="closeUpdates()" class="close-updates-btn" aria-label="Close Updates">✖️</button>
+            </div>
+            <div class="updates-body">
+                <div class="update-date">📅 September 25, 2025 - Amazing Updates! 🎉</div>
+                <div class="update-section">
+                    <h3>🎓 Major Academic Structure Update</h3>
+                    <div class="update-item">
+                        <div class="update-icon">📚</div>
+                        <div class="update-content">
+                            <h4>Semester-Based Organization</h4>
+                            <p>Reorganized all subjects into a proper semester system for a more academic feel!</p>
+                            <ul>
+                                <li><strong>Semester 1:</strong> All current subjects organized professionally</li>
+                                <li><strong>Semester 2:</strong> Coming soon preview with exciting subjects</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="update-section">
+                    <h3>💪 New Subject Added</h3>
+                    <div class="update-item">
+                        <div class="update-icon">💪</div>
+                        <div class="update-content">
+                            <h4>Muscular System Course</h4>
+                            <p>Complete muscular system study materials added!</p>
+                            <ul>
+                                <li>7 comprehensive topics covering muscle anatomy</li>
+                                <li>46 detailed flashcards with clinical information</li>
+                                <li>28 quiz questions testing your knowledge</li>
+                                <li>Topics: Introduction, Muscle Types, Microscopic Anatomy, Movements, Major Muscles, Exercise Physiology</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="update-section">
+                    <h3>🧪 Chemistry Subject Added</h3>
+                    <div class="update-item">
+                        <div class="update-icon">🧪</div>
+                        <div class="update-content">
+                            <h4>Chemical Bonding Course</h4>
+                            <p>Essential chemistry fundamentals for medical laboratory science!</p>
+                            <ul>
+                                <li>6 detailed topics covering bonding theory</li>
+                                <li>29 flashcards with chemical concepts</li>
+                                <li>24 quiz questions on bonding and nomenclature</li>
+                                <li>Topics: Atomic Stability, Ionic Bonds, Covalent Bonds, Electronegativity, Bond Types, Acid Naming</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="update-section">
+                    <h3>➕ Custom Flashcard Feature</h3>
+                    <div class="update-item">
+                        <div class="update-icon">📝</div>
+                        <div class="update-content">
+                            <h4>Create Your Own Study Cards</h4>
+                            <p>Now you can add personalized flashcards to any topic!</p>
+                            <ul>
+                                <li>Add custom flashcards directly from topic pages</li>
+                                <li>Beautiful modal interface for easy card creation</li>
+                                <li>JSON-based storage - your cards persist across sessions</li>
+                                <li>Seamlessly integrated with existing flashcard features</li>
+                                <li>Per-user storage - everyone has their own custom cards</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="update-section">
+                    <h3>🌙 Enhanced Dark Mode</h3>
+                    <div class="update-item">
+                        <div class="update-icon">🌙</div>
+                        <div class="update-content">
+                            <h4>Improved Dark Theme Experience</h4>
+                            <p>Dark mode now looks absolutely stunning with enhanced styling!</p>
+                            <ul>
+                                <li>Better contrast and visibility for all containers</li>
+                                <li>Beautiful gradient effects and glowing borders</li>
+                                <li>Enhanced semester section visibility</li>
+                                <li>Improved readability for all text elements</li>
+                                <li>Consistent pink theme colors throughout</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="update-section">
+                    <h3>✨ Visual Improvements</h3>
+                    <div class="update-item">
+                        <div class="update-icon">✨</div>
+                        <div class="update-content">
+                            <h4>Beautiful UI Enhancements</h4>
+                            <p>Multiple visual improvements for a better learning experience!</p>
+                            <ul>
+                                <li>Animated "Coming Soon" cards with shimmer effects</li>
+                                <li>Floating subject preview tags</li>
+                                <li>Enhanced semester headers with gradient accents</li>
+                                <li>Improved mobile responsive design</li>
+                                <li>Professional academic layout structure</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="update-section">
+                    <h3>🚀 Technical Improvements</h3>
+                    <div class="update-item">
+                        <div class="update-icon">⚡</div>
+                        <div class="update-content">
+                            <h4>Backend Enhancements</h4>
+                            <p>Under-the-hood improvements for better performance!</p>
+                            <ul>
+                                <li>Optimized JSON data structure for custom flashcards</li>
+                                <li>Improved localStorage management</li>
+                                <li>Better error handling and data validation</li>
+                                <li>Enhanced animation performance</li>
+                                <li>Cleaner code organization</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="coming-next">
+                    <h3>🔮 Coming Next</h3>
+                    <p>Here's what we're working on for future updates:</p>
+                    <div class="future-features">
+                        <span class="future-feature">🩸 Hematology Course</span>
+                        <span class="future-feature">🦠 Microbiology Course</span>
+                        <span class="future-feature">🧬 Clinical Chemistry</span>
+                        <span class="future-feature">🔬 Immunology</span>
+                        <span class="future-feature">📊 Advanced Analytics</span>
+                        <span class="future-feature">🎯 Learning Paths</span>
+                    </div>
+                </div>
+            </div>
+            <div class="updates-footer">
+                <p>💖 Thank you for using our Medical Laboratory Science Learning Platform!</p>
+                <p>Keep studying and stay amazing! 🌟</p>
+            </div>
+        </div>
+    </div>
     <script src="script.js"></script>
 </body>
 </html>
