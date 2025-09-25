@@ -1175,6 +1175,442 @@ const courseData = {
                 ]
             }
         }
+    },
+    pmls404: {
+        title: "PMLS 404 - Muscular System",
+        topics: {
+            topic1: {
+                title: "Introduction & Fun Facts",
+                flashcards: [
+                    { question: "Approximately how many muscles are in the human body?", answer: "About 600-650 muscles." },
+                    { question: "What percentage of body weight do muscles make up?", answer: "40-50%." },
+                    { question: "How many muscles does it take to smile? To frown?", answer: "17 to smile, 42 to frown." },
+                    { question: "What is the hardest working muscle in the body?", answer: "The muscle in the eye." },
+                    { question: "What is the largest muscle in the body?", answer: "The Gluteus Maximus." }
+                ],
+                quiz: [
+                    {
+                        question: "Muscles account for what percentage of total body weight?",
+                        options: ["20-30%", "40-50%", "60-70%", "70-80%"],
+                        answer: 1
+                    },
+                    {
+                        question: "Which of the following is considered the hardest working muscle?",
+                        options: ["Heart", "Gluteus Maximus", "Masseter (jaw muscle)", "Eye muscle"],
+                        answer: 3
+                    },
+                    {
+                        question: "How many muscles are typically used to form a frown?",
+                        options: ["17", "23", "42", "50"],
+                        answer: 2
+                    },
+                    {
+                        question: "The muscular system is primarily made up of muscles and what other structure that connects them to bones?",
+                        options: ["Ligaments", "Tendons", "Cartilage", "Aponeuroses"],
+                        answer: 1
+                    }
+                ]
+            },
+            topic2: {
+                title: "Muscle Types & Classification",
+                flashcards: [
+                    { question: "What are the three types of muscle tissue?", answer: "Skeletal, Cardiac, Smooth." },
+                    { question: "Which muscle types are striated?", answer: "Skeletal and Cardiac." },
+                    { question: "Which muscle types are involuntary?", answer: "Cardiac and Smooth." },
+                    { question: "Which muscle type is voluntary and multinucleated?", answer: "Skeletal muscle." },
+                    { question: "Where is cardiac muscle found? What is its main function?", answer: "Found only in the heart; function is to pump blood." },
+                    { question: "Where is smooth muscle found? What is its main function?", answer: "Found in walls of hollow organs (stomach, intestines, bladder); function is to propel substances (peristalsis)." }
+                ],
+                quiz: [
+                    {
+                        question: "Which of the following characteristics applies to skeletal muscle?",
+                        options: ["Involuntary control", "Single nucleus per cell", "Striated and multinucleated", "Found in the stomach wall"],
+                        answer: 2
+                    },
+                    {
+                        question: "The muscle type that is involuntary and non-striated is:",
+                        options: ["Skeletal", "Cardiac", "Smooth", "Both a and b"],
+                        answer: 2
+                    },
+                    {
+                        question: "Which muscle type contains intercalated discs?",
+                        options: ["Skeletal", "Cardiac", "Smooth", "All of the above"],
+                        answer: 1
+                    },
+                    {
+                        question: "Propelling food through the digestive tract is the primary function of which muscle type?",
+                        options: ["Skeletal", "Cardiac", "Smooth", "Striated"],
+                        answer: 2
+                    }
+                ]
+            },
+            topic3: {
+                title: "Skeletal Muscle Specifics",
+                flashcards: [
+                    { question: "What are the three main functions of skeletal muscle?", answer: "Locomotion/Breathing, Maintaining Posture, Heat Production." },
+                    { question: "What are the three connective tissue layers that bundle skeletal muscle fibers?", answer: "Endomysium, Perimysium, Epimysium." },
+                    { question: "What does a tendon connect?", answer: "Muscle to bone." },
+                    { question: "What is a fascicle?", answer: "A bundle of muscle fibers." },
+                    { question: "What is the cell membrane of a muscle fiber called?", answer: "Sarcolemma." },
+                    { question: "What is the cytoplasm of a muscle fiber called?", answer: "Sarcoplasm." }
+                ],
+                quiz: [
+                    {
+                        question: "The connective tissue layer that surrounds an individual muscle fiber is the:",
+                        options: ["Endomysium", "Perimysium", "Epimysium", "Fascia"],
+                        answer: 0
+                    },
+                    {
+                        question: "Which of the following is NOT a function of skeletal muscle?",
+                        options: ["Pumping blood", "Maintaining posture", "Producing heat", "Facilitating locomotion"],
+                        answer: 0
+                    },
+                    {
+                        question: "The term \"sarcolemma\" refers to the muscle fiber's:",
+                        options: ["Cytoplasm", "Endoplasmic reticulum", "Cell membrane", "Contractile unit"],
+                        answer: 2
+                    },
+                    {
+                        question: "A bundle of muscle fibers is called a:",
+                        options: ["Myofibril", "Sarcomere", "Fascicle", "Tendon"],
+                        answer: 2
+                    }
+                ]
+            },
+            topic4: {
+                title: "Microscopic Anatomy & Contraction",
+                flashcards: [
+                    { question: "What are the two main protein filaments in a myofibril?", answer: "Actin (thin) and Myosin (thick)." },
+                    { question: "What is the smallest functional unit of a muscle fiber?", answer: "The Sarcomere." },
+                    { question: "What are the boundaries of a sarcomere?", answer: "Z-lines (Z-discs)." },
+                    { question: "What is the theory that explains how muscles contract?", answer: "The Sliding Filament Theory." },
+                    { question: "During contraction, which filament slides past which?", answer: "Thin (actin) filaments slide past thick (myosin) filaments." },
+                    { question: "What is the role of calcium in muscle contraction?", answer: "Calcium binds to troponin, moving tropomyosin to expose the active sites on actin so myosin heads can bind." },
+                    { question: "What is the specialized smooth ER in muscle cells that stores calcium called?", answer: "Sarcoplasmic Reticulum (SR)." },
+                    { question: "What is a triad?", answer: "A T-tubule flanked by two terminal cisternae of the SR." }
+                ],
+                quiz: [
+                    {
+                        question: "The thick filament in a sarcomere is composed of the protein:",
+                        options: ["Actin", "Myosin", "Troponin", "Titin"],
+                        answer: 1
+                    },
+                    {
+                        question: "According to the sliding filament theory, during contraction:",
+                        options: ["Myosin filaments shorten", "Actin filaments shorten", "Sarcomeres shorten as actin and myosin filaments slide past each other", "The A band disappears"],
+                        answer: 2
+                    },
+                    {
+                        question: "The release of calcium ions initiates muscle contraction by binding to:",
+                        options: ["Myosin heads", "Tropomyosin", "Troponin", "Actin"],
+                        answer: 2
+                    },
+                    {
+                        question: "The structure formed by a T-tubule and two terminal cisternae is called a:",
+                        options: ["Sarcomere", "Fascicle", "Triad", "Myofibril"],
+                        answer: 2
+                    }
+                ]
+            },
+            topic5: {
+                title: "Muscle Movements & Terminology",
+                flashcards: [
+                    { question: "What is the difference between a muscle's origin and its insertion?", answer: "Origin: attachment to the immovable or less movable bone. Insertion: attachment to the movable bone." },
+                    { question: "What is flexion?", answer: "Decreases the angle of a joint (e.g., bending the elbow)." },
+                    { question: "What is extension?", answer: "Increases the angle of a joint (e.g., straightening the elbow)." },
+                    { question: "What is abduction?", answer: "Movement away from the midline of the body." },
+                    { question: "What is adduction?", answer: "Movement toward the midline of the body." },
+                    { question: "What is rotation?", answer: "Movement of a bone around its longitudinal axis (e.g., shaking head \"no\")." },
+                    { question: "What is circumduction?", answer: "A combination of flexion, extension, abduction, and adduction resulting in a conical movement (e.g., moving arm in a circle)." }
+                ],
+                quiz: [
+                    {
+                        question: "Moving the arm toward the body is an example of:",
+                        options: ["Abduction", "Adduction", "Flexion", "Rotation"],
+                        answer: 1
+                    },
+                    {
+                        question: "Straightening the knee joint is an example of:",
+                        options: ["Flexion", "Extension", "Abduction", "Circumduction"],
+                        answer: 1
+                    },
+                    {
+                        question: "The point of muscle attachment that is typically movable is the:",
+                        options: ["Origin", "Belly", "Insertion", "Fascia"],
+                        answer: 2
+                    },
+                    {
+                        question: "Shaking your head \"no\" involves which movement?",
+                        options: ["Flexion", "Extension", "Rotation", "Circumduction"],
+                        answer: 2
+                    }
+                ]
+            },
+            topic6: {
+                title: "Major Muscles & Their Actions",
+                flashcards: [
+                    { question: "What is the action of the Masseter and Temporalis?", answer: "Elevate the mandible (close the jaw)." },
+                    { question: "What is the action of the Biceps Brachii?", answer: "Flexes the elbow joint." },
+                    { question: "What is the action of the Triceps Brachii?", answer: "Extends the elbow joint." },
+                    { question: "What is the action of the Deltoid?", answer: "Abducts the arm." },
+                    { question: "What is the action of the Pectoralis Major?", answer: "Flexes and adducts the arm." },
+                    { question: "What is the action of the Rectus Abdominis?", answer: "Flexes the abdomen (e.g., doing a crunch)." },
+                    { question: "What is the action of the Gluteus Maximus?", answer: "Extends and laterally rotates the thigh." },
+                    { question: "What is the action of the Quadriceps group (e.g., Rectus Femoris)?", answer: "Extends the lower leg." },
+                    { question: "What is the action of the Hamstrings group (e.g., Biceps Femoris)?", answer: "Flexes the lower leg and extends the thigh." },
+                    { question: "What is the action of the Gastrocnemius?", answer: "Plantar flexes the foot (points toes)." }
+                ],
+                quiz: [
+                    {
+                        question: "The prime mover for elbow flexion is the:",
+                        options: ["Triceps brachii", "Deltoid", "Biceps brachii", "Pectoralis major"],
+                        answer: 2
+                    },
+                    {
+                        question: "The muscle that is the main antagonist to the biceps brachii is the:",
+                        options: ["Brachialis", "Deltoid", "Triceps brachii", "Latissimus dorsi"],
+                        answer: 2
+                    },
+                    {
+                        question: "The muscle group located on the posterior thigh is the:",
+                        options: ["Quadriceps", "Hamstrings", "Gluteals", "Adductors"],
+                        answer: 1
+                    },
+                    {
+                        question: "The prime mover for arm abduction is the:",
+                        options: ["Pectoralis major", "Latissimus dorsi", "Deltoid", "Biceps brachii"],
+                        answer: 2
+                    }
+                ]
+            },
+            topic7: {
+                title: "Exercise, Fatigue, and Physiology",
+                flashcards: [
+                    { question: "What is muscle fatigue?", answer: "When a muscle is unable to contract despite continued stimulation." },
+                    { question: "What is a common cause of muscle fatigue?", answer: "Oxygen debt and the accumulation of lactic acid." },
+                    { question: "What are the effects of regular exercise on muscle?", answer: "Increased size (hypertrophy), strength, efficiency, and fatigue resistance." },
+                    { question: "What is the name of the oxygen-binding protein found in muscle cells?", answer: "Myoglobin." }
+                ],
+                quiz: [
+                    {
+                        question: "The inability of a muscle to maintain its strength of contraction or tension is known as:",
+                        options: ["Oxygen debt", "Muscle fatigue", "Hypertrophy", "Tetany"],
+                        answer: 1
+                    },
+                    {
+                        question: "Regular exercise leads to all of the following EXCEPT:",
+                        options: ["Muscle hypertrophy", "Increased fatigue resistance", "Conversion of muscle to fat", "Improved muscle efficiency"],
+                        answer: 2
+                    },
+                    {
+                        question: "The \"oxygen debt\" incurred during strenuous exercise is used primarily to:",
+                        options: ["Rebuild myosin filaments", "Convert lactic acid back to glucose", "Stimulate the nervous system", "Create new muscle cells"],
+                        answer: 1
+                    },
+                    {
+                        question: "The protein in muscle fibers that stores oxygen is:",
+                        options: ["Hemoglobin", "Myosin", "Myoglobin", "Actin"],
+                        answer: 2
+                    }
+                ]
+            }
+        }
+    },
+    pmls405: {
+        title: "PMLS 405 - Chemical Bonding",
+        topics: {
+            topic1: {
+                title: "Introduction & Stability",
+                flashcards: [
+                    { question: "When is an atom considered most stable?", answer: "When its outermost energy level has eight electrons (an octet)." },
+                    { question: "What does it mean for an atom to be isoelectronic with a noble gas?", answer: "It has the same electron configuration as a noble gas, making it very stable." },
+                    { question: "What is the Octet Rule?", answer: "The tendency of atoms to prefer to have eight electrons in their valence shell to achieve stability." },
+                    { question: "What does a Lewis Dot Structure represent?", answer: "The valence electrons of an atom, shown as dots around the chemical symbol." }
+                ],
+                quiz: [
+                    {
+                        question: "The Octet Rule states that atoms are stable when they have how many valence electrons?",
+                        options: ["2", "8", "18", "It depends on the period"],
+                        answer: 1
+                    },
+                    {
+                        question: "A Lewis Dot Structure primarily illustrates an atom's:",
+                        options: ["Nucleus and all electrons", "Kernel and valence electrons", "Number of neutrons", "Atomic mass"],
+                        answer: 1
+                    },
+                    {
+                        question: "Maximum stability for an atom is achieved when it is isoelectronic with a:",
+                        options: ["Halogen", "Alkali metal", "Noble gas", "Transition metal"],
+                        answer: 2
+                    },
+                    {
+                        question: "The chemical symbol in a Lewis structure represents the:",
+                        options: ["Valence electrons", "Kernel (nucleus + inner electrons)", "Total number of electrons", "Atomic number only"],
+                        answer: 1
+                    }
+                ]
+            },
+            topic2: {
+                title: "Ionic Bonds",
+                flashcards: [
+                    { question: "How is an ionic bond formed?", answer: "By the complete transfer of electron(s) from a metal atom to a nonmetal atom." },
+                    { question: "What is the force that holds ions together in an ionic bond?", answer: "Electrostatic attraction between positively charged cations and negatively charged anions." },
+                    { question: "What is a cation? An anion?", answer: "Cation: A positively charged ion (lost electrons). Anion: A negatively charged ion (gained electrons)." },
+                    { question: "What is the difference between a monatomic ion and a polyatomic ion?", answer: "Monatomic: A single atom with a charge (e.g., Na⁺). Polyatomic: A group of atoms covalently bonded that have a net charge (e.g., NH₄⁺)." },
+                    { question: "List three properties of ionic compounds.", answer: "High melting/boiling points, conduct electricity when molten or dissolved, usually soluble in water, crystalline solids." }
+                ],
+                quiz: [
+                    {
+                        question: "An ionic bond is most likely to form between a:",
+                        options: ["Metal and a nonmetal", "Nonmetal and a nonmetal", "Metal and a noble gas", "Two metals"],
+                        answer: 0
+                    },
+                    {
+                        question: "A positively charged ion is called a(n):",
+                        options: ["Anion", "Cation", "Polyatomic ion", "Electron"],
+                        answer: 1
+                    },
+                    {
+                        question: "Which of the following is a property of ionic compounds?",
+                        options: ["Low melting point", "Does not conduct electricity in any state", "High melting point and conducts electricity when dissolved", "Usually liquid at room temperature"],
+                        answer: 2
+                    },
+                    {
+                        question: "The formula for Sodium Chloride is NaCl. What is the correct name for CaBr₂?",
+                        options: ["Calcium Bromine", "Monocalcium Dibromide", "Calcium Bromide", "Calcium (II) Bromide"],
+                        answer: 2
+                    }
+                ]
+            },
+            topic3: {
+                title: "Covalent Bonds",
+                flashcards: [
+                    { question: "How is a covalent bond formed?", answer: "By the sharing of electron pairs between two atoms." },
+                    { question: "What is another name for compounds held together by covalent bonds?", answer: "Molecular compounds." },
+                    { question: "What is a nonpolar covalent bond?", answer: "A bond where electrons are shared equally between two atoms of identical or very similar electronegativity." },
+                    { question: "What is a polar covalent bond?", answer: "A bond where electrons are shared unequally due to a difference in electronegativity between the two atoms." },
+                    { question: "In a polar covalent bond, how are the partial charges denoted?", answer: "δ⁺ (partial positive) on the less electronegative atom, δ⁻ (partial negative) on the more electronegative atom." },
+                    { question: "What is a diatomic molecule? Give an example.", answer: "A molecule consisting of two atoms. Example: O₂, N₂, Cl₂." },
+                    { question: "List two properties of molecular (covalent) compounds.", answer: "Low melting/boiling points, often gases/liquids at room temperature, do not conduct electricity, often insoluble in water but soluble in organic solvents." }
+                ],
+                quiz: [
+                    {
+                        question: "A covalent bond involves the:",
+                        options: ["Transfer of electrons from a metal to a nonmetal", "Sharing of electron pairs between atoms", "attraction between positive and negative ions", "Pooling of electrons in a metal lattice"],
+                        answer: 1
+                    },
+                    {
+                        question: "A bond where electrons are shared equally is called:",
+                        options: ["Ionic", "Polar covalent", "Nonpolar covalent", "Coordinate covalent"],
+                        answer: 2
+                    },
+                    {
+                        question: "Which of the following molecules would have a nonpolar covalent bond?",
+                        options: ["HCl", "H₂O", "Cl₂", "HF"],
+                        answer: 2
+                    },
+                    {
+                        question: "Which of the following is a typical property of a covalent compound?",
+                        options: ["High electrical conductivity", "High melting point", "Low boiling point", "Soluble only in water"],
+                        answer: 2
+                    }
+                ]
+            },
+            topic4: {
+                title: "Electronegativity & Bond Polarity",
+                flashcards: [
+                    { question: "What property determines the polarity of a bond?", answer: "The difference in electronegativity (ΔEN) between the two bonded atoms." },
+                    { question: "What is the general rule for ΔEN and bond type?", answer: "~0: Nonpolar Covalent. 0.3 - 2.0: Polar Covalent. >2.0: Ionic." },
+                    { question: "What happens to bond polarity as the electronegativity difference increases?", answer: "The bond becomes more polar." }
+                ],
+                quiz: [
+                    {
+                        question: "Bond polarity is directly proportional to:",
+                        options: ["The atomic mass of the atoms", "The difference in electronegativity between the atoms", "The number of electrons shared", "The size of the atoms"],
+                        answer: 1
+                    },
+                    {
+                        question: "A bond with an electronegativity difference (ΔEN) of 1.5 would be classified as:",
+                        options: ["Nonpolar covalent", "Polar covalent", "Ionic", "Metallic"],
+                        answer: 1
+                    },
+                    {
+                        question: "Which bond is the most polar?",
+                        options: ["H-H (ΔEN = 0.0)", "H-Cl (ΔEN ≈ 0.9)", "Na-Cl (ΔEN ≈ 2.1)", "C-H (ΔEN ≈ 0.4)"],
+                        answer: 2
+                    },
+                    {
+                        question: "In a molecule of HCl, which atom would have a partial negative charge (δ⁻)?",
+                        options: ["Hydrogen", "Chlorine", "Neither, it's nonpolar", "Both share the charge equally"],
+                        answer: 1
+                    }
+                ]
+            },
+            topic5: {
+                title: "Types of Covalent Bonds & Naming",
+                flashcards: [
+                    { question: "What is a multiple covalent bond?", answer: "A bond where atoms share two or more pairs of electrons (double or triple bond)." },
+                    { question: "What is a coordinate covalent bond?", answer: "A bond where both shared electrons come from the same atom." },
+                    { question: "What prefixes are used in naming binary covalent compounds?", answer: "mono-, di-, tri-, tetra-, penta-, etc. (Note: 'mono-' is often omitted for the first element)." },
+                    { question: "What is the name for CCl₄?", answer: "Carbon tetrachloride." },
+                    { question: "How are binary acids (like HCl) named?", answer: "Hydro- + stem of nonmetal + -ic + acid (e.g., hydrochloric acid)." },
+                    { question: "How are ternary acids with polyatomic ions ending in '-ate' (like H₂SO₄) named?", answer: "Stem of nonmetal + -ic + acid (e.g., sulfuric acid)." },
+                    { question: "How are ternary acids with polyatomic ions ending in '-ite' (like H₂SO₃) named?", answer: "Stem of nonmetal + -ous + acid (e.g., sulfurous acid)." }
+                ],
+                quiz: [
+                    {
+                        question: "A double bond is an example of a:",
+                        options: ["Ionic bond", "Single covalent bond", "Multiple covalent bond", "Coordinate covalent bond"],
+                        answer: 2
+                    },
+                    {
+                        question: "What is the correct name for N₂O₅?",
+                        options: ["Nitrogen oxide", "Dinitrogen pentoxide", "Nitrogen pentoxide", "Nitrogen (V) oxide"],
+                        answer: 1
+                    },
+                    {
+                        question: "The acid formed from the ion ClO⁻ (hypochlorite) is named:",
+                        options: ["Chloric acid", "Chlorous acid", "Hypochlorous acid", "Perchloric acid"],
+                        answer: 2
+                    },
+                    {
+                        question: "In the ammonium ion (NH₄⁺), the bond between the nitrogen and one of the hydrogens is a:",
+                        options: ["Polar covalent bond", "Ionic bond", "Coordinate covalent bond", "Nonpolar covalent bond"],
+                        answer: 2
+                    }
+                ]
+            },
+            topic6: {
+                title: "Generalizations & Acid Naming",
+                flashcards: [
+                    { question: "What type of bond forms between atoms with the same electronegativity?", answer: "Nonpolar covalent bond." },
+                    { question: "What type of bond forms between atoms with different electronegativities?", answer: "Polar covalent bond (or ionic if the difference is large)." },
+                    { question: "What is the key difference in solubility between ionic and covalent compounds?", answer: "Ionic compounds are often soluble in water; covalent compounds are often soluble in organic solvents." }
+                ],
+                quiz: [
+                    {
+                        question: "According to the notes, atoms with the same electronegativity will form what type of bond?",
+                        options: ["Ionic", "Polar Covalent", "Nonpolar Covalent", "Metallic"],
+                        answer: 2
+                    },
+                    {
+                        question: "The correct name for H₂S (aq) is:",
+                        options: ["Sulfuric acid", "Sulfurous acid", "Hydrosulfuric acid", "Hydrogen sulfide acid"],
+                        answer: 2
+                    },
+                    {
+                        question: "The acid name for HClO₄ (from perchlorate) is:",
+                        options: ["Hypochlorous acid", "Chlorous acid", "Chloric acid", "Perchloric acid"],
+                        answer: 3
+                    },
+                    {
+                        question: "Covalent compounds are often insoluble in water but dissolve more readily in:",
+                        options: ["Acids", "Bases", "Organic solvents", "Molten salts"],
+                        answer: 2
+                    }
+                ]
+            }
+        }
     }
 };
 
